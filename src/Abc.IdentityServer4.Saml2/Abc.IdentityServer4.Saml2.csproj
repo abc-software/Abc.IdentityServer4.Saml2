@@ -1,0 +1,46 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PackageId>Abc.IdentityServer4.Saml2</PackageId>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <LangVersion>9.0</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Endpoints\Results\LogoutPageResult.cs" />
+    <Compile Remove="Endpoints\Saml2SingleLogOutEndpoint.cs" />
+    <Compile Remove="Extensions\HttpRequestExtensions.cs" />
+    <Compile Remove="Services\Artifact4HandleGenerationService.cs" />
+    <Compile Remove="Services\IArtifactHandleGenerationService.cs" />
+    <Compile Remove="Services\SessionLogoutContext.cs" />
+    <Compile Remove="Services\SingleLogoutService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Logging\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Endpoints\Results\LogoutPageResult.cs" />
+    <None Include="Endpoints\Saml2SingleLogOutEndpoint.cs" />
+    <None Include="Extensions\HttpRequestExtensions.cs" />
+    <None Include="Services\Artifact4HandleGenerationService.cs" />
+    <None Include="Services\IArtifactHandleGenerationService.cs" />
+    <None Include="Services\SessionLogoutContext.cs" />
+    <None Include="Services\SingleLogoutService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Abc.IdentityModel.Http" Version="2.0.0-dev47" />
+    <PackageReference Include="Abc.IdentityModel.Http.Saml" Version="2.0.0-dev47" />
+    <PackageReference Include="IdentityServer4" Version="4.1.2" />
+    <PackageReference Include="IdentityServer4.Storage" Version="4.1.2" />
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Scrutor" Version="3.3.0" />
+    <PackageReference Include="Sustainsys.Saml2" Version="2.9.0" />
+  </ItemGroup>
+</Project>

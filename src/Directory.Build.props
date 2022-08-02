@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageProjectUrl>https://github.com/abc-software/Abc.IdentityServer4.Saml2</PackageProjectUrl>
+    <PackageTags>identityserver;idsrv;saml2p;authentication;auth</PackageTags>
+    
+    <RepositoryUrl>https://github.com/abc-software/Abc.IdentityServer4.Saml2.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    
+    <Description>SAML2 protocol for IdentityServer4</Description>
+    <Version>1.0.0-dev65</Version>
+
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>ids.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="stylecop.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <AdditionalFiles Include="..\stylecop.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.NetFramework.Analyzers" Version="3.3.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="SonarAnalyzer.CSharp" Version="8.33.0.40503">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="StyleCop.Analyzers" Version="1.2.0-beta.376">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <!--<PackageReference Include="SourceLink.Create.CommandLine" Version="2.8.0" PrivateAssets="All" /> -->
+  </ItemGroup>
+</Project>
