@@ -1,4 +1,13 @@
-﻿using Abc.IdentityModel.Http;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="LogoutNotificationService.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using Abc.IdentityModel.Http;
 using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using Abc.IdentityServer4.Saml2.Stores;
@@ -52,7 +61,7 @@ namespace Abc.IdentityServer4.Saml2.Services
                 var participant = (Saml2SessionParticipant)cid;
                 var clientId = participant.ClientId;
 
-                var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityId(clientId);
+                var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityIdAsync(clientId);
                 if (relyingParty is null)
                 {
                     continue;

@@ -1,4 +1,13 @@
-﻿using Abc.IdentityServer4.Saml2.ResponseProcessing;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="Saml2MetadataEndpoint.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using IdentityServer4.Endpoints.Results;
 using IdentityServer4.Hosting;
 using Microsoft.AspNetCore.Http;

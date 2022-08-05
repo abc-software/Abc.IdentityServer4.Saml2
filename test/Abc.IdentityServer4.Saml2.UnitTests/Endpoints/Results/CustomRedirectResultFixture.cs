@@ -74,7 +74,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
             location.Should().StartWith("https://server/cutom");
 
             var query = QueryHelpers.ParseQuery(new Uri(location).Query);
-            query["returnUrl"].First().Should().Contain("/saml2");
+            query["returnUrl"].First().Should().Contain("/saml2/callback");
             query["returnUrl"].First().Should().Contain("?authzId=" + _authorizationParametersMessageStore.Messages.First().Key);
         }
     }

@@ -1,4 +1,13 @@
-﻿using Abc.IdentityModel.Protocols.Saml2;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="Saml2RequestValidator.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Extensions;
 using Abc.IdentityServer4.Saml2.Stores;
 using IdentityServer4;
@@ -69,7 +78,7 @@ namespace Abc.IdentityServer4.Saml2.Validation
             }
 
             // check if additional relying party settings exist
-            validatedResult.RelyingParty = await _relyingParties.FindRelyingPartyByEntityId(validatedResult.ClientId);
+            validatedResult.RelyingParty = await _relyingParties.FindRelyingPartyByEntityIdAsync(validatedResult.ClientId);
 
             // validate assertionConsumerServiceUrl
             var replyResult = await ValidateReplyAsync(validatedResult);

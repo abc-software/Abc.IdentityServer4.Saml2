@@ -1,11 +1,22 @@
-﻿using Abc.IdentityModel.Protocols;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="Saml2ArtifactResolutionEndpoint.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using Abc.IdentityModel.Protocols;
 using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.Stores;
+using IdentityServer4.Endpoints.Results;
 using IdentityServer4.Extensions;
 using IdentityServer4.Hosting;
 using IdentityServer4.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.IdentityModel.Tokens.Saml2;
 using System;
@@ -22,12 +33,18 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
         private readonly Stores.IArtifactStore _artifactStore;
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IKeyMaterialService _keys;
+        private readonly ILogger _logger;
 
-        public Saml2ArtifactResolutionEndpoint(IArtifactStore artifactStore, IHttpContextAccessor contextAccessor, IKeyMaterialService keys)
+        public Saml2ArtifactResolutionEndpoint(
+            IArtifactStore artifactStore, 
+            IHttpContextAccessor contextAccessor, 
+            IKeyMaterialService keys,
+            ILogger<Saml2ArtifactResolutionEndpoint> logger)
         {
             _artifactStore = artifactStore;
             _contextAccessor = contextAccessor;
             _keys = keys;
+            _logger = logger;
         }
 
         public async Task<IEndpointResult> ProcessAsync(HttpContext context)
@@ -38,9 +55,15 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
                 syncIOFeature.AllowSynchronousIO = true;
             }
 
+            var result = ValidateRequest(context.Request);
+            if (result != null)
+            {
+                return result;
+            }
+
             var request = ReadProtocolMessage(context.Request) as Saml2ArtifactResolve;
 
-            var response = await ProcessSamlRequest(request);
+            var response = await ProcessSamlRequestAsync(request);
 
             return new BodyWriter(_samlProtocolSerializer, response);
         }
@@ -50,7 +73,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
         /// </summary>
         /// <param name="artifactRequest">The SAML2 ArtifactResolve request.</param>
         /// <returns>The SAML2 protocol response.</returns>
-        public async Task<Saml2ArtifactResponse> ProcessSamlRequest(Saml2ArtifactResolve artifactRequest)
+        public async Task<Saml2ArtifactResponse> ProcessSamlRequestAsync(Saml2ArtifactResolve artifactRequest)
         {
             if (artifactRequest == null)
             {
@@ -114,20 +137,6 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
 
         protected Saml2Message ReadProtocolMessage(HttpRequest request)
         {
-            // Content-Type should be text/xml; charset="utf-8"
-            var contentType = new ContentType(request.ContentType);
-            if (contentType.MediaType != "text/xml" && contentType.CharSet != "utf-8")
-            {
-                // TODO:  exception
-            }
-
-            // SOAPAction should be http://www.oasis-open.org/committees/security
-            var action = request.Headers["SOAPAction"].ToString();
-            if (action != "http://www.oasis-open.org/committees/security")
-            {
-                // TODO:  exception
-            }
-
             using var reader = XmlReader.Create(request.Body);
             reader.MoveToContent();
 
@@ -152,6 +161,35 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
             reader.ReadEndElement();
 
             return message;
+        }
+
+        protected IEndpointResult ValidateRequest(HttpRequest request)
+        {
+            if (!HttpMethods.IsPost(request.Method))
+            {
+                _logger.LogWarning("SAML2 artifact endpoint only supports POST requests");
+                return new StatusCodeResult(System.Net.HttpStatusCode.MethodNotAllowed);
+            }
+
+            // Content-Type should be text/xml; charset="utf-8"
+            var contentType = new ContentType(request.ContentType);
+            if (contentType.MediaType != "text/xml" && contentType.CharSet != "utf-8")
+            {
+                _logger.LogWarning("SAML2 artifact endpoint only supports 'text/xml' media type");
+                return new StatusCodeResult(System.Net.HttpStatusCode.UnsupportedMediaType);
+            }
+
+            // SOAPAction should be http://www.oasis-open.org/committees/security
+            var action = request.Headers["SOAPAction"].ToString();
+            if (action != "http://www.oasis-open.org/committees/security")
+            {
+                _logger.LogWarning("SAML2 artifact endpoint must be with valid SOAPAction header");
+                return new StatusCodeResult(System.Net.HttpStatusCode.BadRequest);
+            }
+
+            // Body is empty
+
+            return null;
         }
 
         private class BodyWriter : IEndpointResult

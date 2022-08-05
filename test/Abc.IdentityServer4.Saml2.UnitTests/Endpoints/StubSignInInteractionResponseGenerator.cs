@@ -4,7 +4,7 @@ using IdentityServer4.Models;
 using IdentityServer4.ResponseHandling;
 using System.Threading.Tasks;
 
-namespace Abc.IdentityServer4.Saml2.Endpoint.UnitTests
+namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 {
     internal class StubSignInInteractionResponseGenerator : ISignInInteractionResponseGenerator
     {

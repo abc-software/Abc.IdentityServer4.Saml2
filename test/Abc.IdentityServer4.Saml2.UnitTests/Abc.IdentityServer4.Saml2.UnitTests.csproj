@@ -12,12 +12,15 @@
 
   <ItemGroup>
     <Compile Remove="Endpoints\Results\LogoutPageResultFixture.cs" />
-    <Compile Remove="UnitTest1.cs" />
+    <Compile Remove="Services\Saml2LogoutNotificationServiceFixture.cs" />
+    <Compile Remove="Services\SessionLogoutContextFixture.cs" />
+    <Compile Remove="SessionLogoutContextFixture.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Include="Endpoints\Results\LogoutPageResultFixture.cs" />
-    <None Include="UnitTest1.cs" />
+    <None Include="Services\Saml2LogoutNotificationServiceFixture.cs" />
+    <None Include="Services\SessionLogoutContextFixture.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -37,6 +40,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Abc.IdentityServer4.Saml2\Abc.IdentityServer4.Saml2.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="idsrvtest.pfx">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

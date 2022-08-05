@@ -17,7 +17,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
         private EndSessionCallbackResult _target;
         private DefaultHttpContext _context;
         private IdentityServerOptions _options;
-        private readonly EndSessionCallbackValidationResult _validationResult;
+        private readonly Saml2EndSessionCallbackValidationResult _validationResult;
 
         public EndSessionCallbackResultFixture()
         {
@@ -28,7 +28,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
 
             _options = new IdentityServerOptions();
 
-            _validationResult = new EndSessionCallbackValidationResult() { IsError = false };
+            _validationResult = new Saml2EndSessionCallbackValidationResult() { IsError = false };
 
             _target = new EndSessionCallbackResult(_validationResult, _options);
         }

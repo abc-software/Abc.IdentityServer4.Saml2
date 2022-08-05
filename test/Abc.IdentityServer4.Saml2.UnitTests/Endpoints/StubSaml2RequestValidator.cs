@@ -3,7 +3,7 @@ using Abc.IdentityServer4.Saml2.Validation;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Abc.IdentityServer4.Saml2.Endpoint.UnitTests
+namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 {
     internal class StubSaml2RequestValidator : ISaml2RequestValidator
     {

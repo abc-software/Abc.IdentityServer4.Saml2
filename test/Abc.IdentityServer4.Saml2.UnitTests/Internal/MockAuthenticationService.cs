@@ -1,0 +1,36 @@
+﻿using Microsoft.AspNetCore.Http;
+using System.Security.Claims;
+using System.Threading.Tasks;
+
+namespace Microsoft.AspNetCore.Authentication
+{
+    internal class MockAuthenticationService : IAuthenticationService
+    {
+        public AuthenticateResult Result { get; set; }
+
+        public Task<AuthenticateResult> AuthenticateAsync(HttpContext context, string scheme)
+        {
+            return Task.FromResult(Result);
+        }
+
+        public Task ChallengeAsync(HttpContext context, string scheme, AuthenticationProperties properties)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task ForbidAsync(HttpContext context, string scheme, AuthenticationProperties properties)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task SignInAsync(HttpContext context, string scheme, ClaimsPrincipal principal, AuthenticationProperties properties)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task SignOutAsync(HttpContext context, string scheme, AuthenticationProperties properties)
+        {
+            return Task.CompletedTask;
+        }
+    }
+}

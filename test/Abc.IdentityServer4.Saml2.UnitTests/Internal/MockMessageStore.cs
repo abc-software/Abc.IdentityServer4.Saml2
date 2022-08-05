@@ -48,7 +48,7 @@ namespace IdentityServer4.Stores
         async Task<Message<IDictionary<string, string[]>>> IAuthorizationParametersMessageStore.ReadAsync(string id)
         {
             var message = await base.ReadAsync(id);
-            return new Message<IDictionary<string, string[]>>(message.Data, DateTime.UtcNow);
+            return new Message<IDictionary<string, string[]>>(message?.Data, DateTime.UtcNow);
         }
     }
 }

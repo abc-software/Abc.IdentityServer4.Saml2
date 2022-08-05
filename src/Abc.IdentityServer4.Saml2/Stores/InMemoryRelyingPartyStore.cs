@@ -7,6 +7,8 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
+using IdentityServer4.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -27,11 +29,16 @@ namespace Abc.IdentityServer4.Saml2.Stores
         /// <param name="relyingParties">The relying parties.</param>
         public InMemoryRelyingPartyStore(IEnumerable<RelyingParty> relyingParties)
         {
-            _relyingParties = relyingParties;
+            _relyingParties = relyingParties ?? throw new System.ArgumentNullException(nameof(relyingParties));
+
+            if (_relyingParties.HasDuplicates(m => m.EntityId))
+            {
+                throw new ArgumentException("Relying parties must not contain duplicate entityIds", nameof(relyingParties));
+            }
         }
 
         /// <inheritdoc/>
-        public Task<RelyingParty> FindRelyingPartyByEntityId(string entityId)
+        public Task<RelyingParty> FindRelyingPartyByEntityIdAsync(string entityId)
         {
             return Task.FromResult(_relyingParties.FirstOrDefault(r => r.EntityId == entityId));
         }

@@ -7,11 +7,9 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
 using Abc.IdentityModel.Protocols.Saml2;
+using System;
+using System.Threading.Tasks;
 
 namespace Abc.IdentityServer4.Saml2.Stores
 {

@@ -1,4 +1,16 @@
-﻿using Abc.IdentityModel.Protocols.Saml2;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="CustomRedirectResult.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.Validation;
 using IdentityServer4.Configuration;
 using IdentityServer4.Extensions;
@@ -8,9 +20,6 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Abc.IdentityServer4.Saml2.Endpoints.Results
 {
@@ -50,7 +59,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results
         {
             Init(context);
 
-            var returnUrl = context.GetIdentityServerBasePath().EnsureTrailingSlash() + Constants.ProtocolRoutePaths.SingleSignOn;
+            var returnUrl = context.GetIdentityServerBasePath().EnsureTrailingSlash() + Constants.ProtocolRoutePaths.SigleSignOnCallback;
 
             var msg = new Message<IDictionary<string, string[]>>(_request.Saml2RequestMessage.ToDictionary(), _clock.UtcNow.UtcDateTime);
             var id = await _authorizationParametersMessageStore.WriteAsync(msg);

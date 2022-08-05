@@ -3,7 +3,7 @@ using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using Abc.IdentityServer4.Saml2.Validation;
 using System.Threading.Tasks;
 
-namespace Abc.IdentityServer4.Saml2.Endpoint.UnitTests
+namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 {
     internal class StubSignInResponseGenerator : ISignInResponseGenerator
     {

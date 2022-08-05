@@ -18,10 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Logging\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Include="Endpoints\Results\LogoutPageResult.cs" />
     <None Include="Endpoints\Saml2SingleLogOutEndpoint.cs" />
     <None Include="Extensions\HttpRequestExtensions.cs" />

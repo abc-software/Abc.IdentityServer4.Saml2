@@ -1,4 +1,13 @@
-﻿using IdentityServer4.Hosting;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="MetadataResult.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using IdentityServer4.Hosting;
 using Microsoft.AspNetCore.Http;
 using Sustainsys.Saml2.Metadata;
 using System.IO;

@@ -59,7 +59,7 @@ namespace Abc.IdentityServer4.Saml2.Services
                 var participant = (Saml2SessionParticipant)cid;
                 var clientId = participant.ClientId;
 
-                var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityId(clientId);
+                var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityIdAsync(clientId);
                 if (relyingParty is null)
                 {
                     continue;

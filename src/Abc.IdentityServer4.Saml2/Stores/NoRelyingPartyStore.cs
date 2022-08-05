@@ -18,7 +18,7 @@ namespace Abc.IdentityServer4.Saml2.Stores
     public class NoRelyingPartyStore : IRelyingPartyStore
     {
         /// <inheritdoc/>
-        public Task<RelyingParty> FindRelyingPartyByEntityId(string entityId)
+        public Task<RelyingParty> FindRelyingPartyByEntityIdAsync(string entityId)
         {
             return Task.FromResult<RelyingParty>(null);
         }

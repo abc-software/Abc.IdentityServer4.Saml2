@@ -19,7 +19,6 @@ using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Options;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
@@ -46,6 +45,7 @@ namespace Microsoft.Extensions.DependencyInjection
             // _OR_
             // to support federated logout, use iframe 
             builder.Services.AddTransient<ISaml2LogoutNotificationService, Saml2LogoutNotificationService>();
+            builder.Services.AddTransient<ISaml2EndSessionRequestValidator, Saml2EndSessionRequestValidator>();
             builder.Services.Decorate<IdentityServer4.Services.IIdentityServerInteractionService, Saml2IdentityServerInteractionService>();
 
             builder.Services.AddTransient<ILogoutRequestGenerator, LogoutRequestGenerator>();
@@ -72,10 +72,11 @@ namespace Microsoft.Extensions.DependencyInjection
                 resolver => resolver.GetRequiredService<IOptions<Saml2SPOptions>>().Value);
 
             builder.AddEndpoint<Saml2SingleSignOnEndpoint>(Constants.EndpointNames.SingleSignOn, Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash());
-            //builder.AddEndpoint<Saml2SingleSignOnEndpoint>(Constants.EndpointNames.Saml2Callback, Constants.ProtocolRoutePaths.Saml2Callback.EnsureLeadingSlash());
+            builder.AddEndpoint<Saml2SingleSignOnCallbackEndpoint>(Constants.EndpointNames.SingleSignOnCallback, Constants.ProtocolRoutePaths.SigleSignOnCallback.EnsureLeadingSlash());
+            builder.AddEndpoint<Saml2SingleLogOutCallbackEndpoint>(Constants.EndpointNames.SingleLogoutServiceCallback, Constants.ProtocolRoutePaths.SingleLogoutServiceCallback.EnsureLeadingSlash());
             builder.AddEndpoint<Saml2MetadataEndpoint>(Constants.EndpointNames.Metadata, Constants.ProtocolRoutePaths.Metadata.EnsureLeadingSlash());
             builder.AddEndpoint<Saml2ArtifactResolutionEndpoint>(Constants.EndpointNames.ArtefactResolutionService, Constants.ProtocolRoutePaths.ArtefactResolutionService.EnsureLeadingSlash());
-            builder.AddEndpoint<EndSessionCallbackEndpoint>(Constants.EndpointNames.SingleLogoutServiceCallback, Constants.ProtocolRoutePaths.SingleLogoutServiceCallback.EnsureLeadingSlash());
+            builder.AddEndpoint<Saml2EndSessionCallbackEndpoint>(Constants.EndpointNames.EndSessionCallback, Constants.ProtocolRoutePaths.EndSessionCallback.EnsureLeadingSlash());
 
             return builder;
         }

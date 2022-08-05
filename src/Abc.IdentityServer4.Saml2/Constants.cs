@@ -40,6 +40,7 @@ namespace Abc.IdentityServer4.Saml2
             public const string ArtefactResolutionService = "saml2ars";
             public const string SingleLogoutService = "saml2slo";
             public const string SingleLogoutServiceCallback = "saml2slocallback";
+            public const string EndSessionCallback = "endsessioncallback";
             public const string Metadata = "metadata";
         }
 
@@ -52,6 +53,7 @@ namespace Abc.IdentityServer4.Saml2
             public const string ArtefactResolutionService = Saml2Prefix + "/ars";
             public const string SingleLogoutService = Saml2Prefix + "/slo";
             public const string SingleLogoutServiceCallback = SingleLogoutService + "/callback";
+            public const string EndSessionCallback = Saml2Prefix + "/endsession/callback";
         }
 
         internal static class DefaultRoutePathParams

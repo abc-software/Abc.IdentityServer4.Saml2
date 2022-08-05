@@ -1,4 +1,13 @@
-﻿using Abc.IdentityModel.Protocols.Saml2;
+﻿// ----------------------------------------------------------------------------
+// <copyright file="EndSessionCallbackResult.cs" company="ABC software Ltd">
+//    Copyright © ABC SOFTWARE. All rights reserved.
+//
+//    Licensed under the Apache License, Version 2.0.
+//    See LICENSE in the project root for license information.
+// </copyright>
+// ----------------------------------------------------------------------------
+
+using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.Validation;
 using IdentityServer4.Configuration;
 using IdentityServer4.Extensions;
@@ -17,15 +26,15 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results
 {
     internal class EndSessionCallbackResult : IEndpointResult
     {
-        private readonly EndSessionCallbackValidationResult _result;
+        private readonly Saml2EndSessionCallbackValidationResult _result;
         private IdentityServerOptions _options;
 
-        public EndSessionCallbackResult(EndSessionCallbackValidationResult result)
+        public EndSessionCallbackResult(Saml2EndSessionCallbackValidationResult result)
         {
             _result = result ?? throw new ArgumentNullException(nameof(result));
         }
 
-        internal EndSessionCallbackResult(EndSessionCallbackValidationResult result, IdentityServerOptions options)
+        internal EndSessionCallbackResult(Saml2EndSessionCallbackValidationResult result, IdentityServerOptions options)
              : this(result)
         {
             _options = options;

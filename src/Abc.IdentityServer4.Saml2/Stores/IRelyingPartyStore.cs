@@ -21,6 +21,6 @@ namespace Abc.IdentityServer4.Saml2.Stores
         /// </summary>
         /// <param name="entityId">The entity identifier.</param>
         /// <returns>The task object representing the asynchronous operation.</returns>
-        Task<RelyingParty> FindRelyingPartyByEntityId(string entityId);
+        Task<RelyingParty> FindRelyingPartyByEntityIdAsync(string entityId);
     }
 }
