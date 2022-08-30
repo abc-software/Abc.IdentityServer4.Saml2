@@ -1,0 +1,55 @@
+﻿<EntityDescriptor
+  ID="_8ccb168c-2cbc-4da5-ac9d-51563595d439"
+  entityID="urn:aspnetwebapprp" xmlns="urn:oasis:names:tc:SAML:2.0:metadata">
+  <SPSSODescriptor
+    protocolSupportEnumeration="urn:oasis:names:tc:SAML:2.0:protocol">
+    <KeyDescriptor
+      use="signing">
+      <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <X509Data>
+          <X509Certificate>
+            MIIDdjCCAl6gAwIBAgIQB6jA/2z5Y7pHPCT/JgNPBTANBgkqhkiG9w0BAQQFADA
+            9MTswOQYDVQQDEzJXSUYgU2FtcGxlcyAtIFNlcnZpY2UgUHJvdmlkZXIgU2lnbm
+            luZyBDZXJ0aWZpY2F0ZTAeFw0xMDEwMDIwMDI2MDlaFw0zNjAxMDEwNzAwMDBaM
+            D0xOzA5BgNVBAMTMldJRiBTYW1wbGVzIC0gU2VydmljZSBQcm92aWRlciBTaWdu
+            aW5nIENlcnRpZmljYXRlMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQE
+            Ava0dWCUP/NpqUpkxN92Hupf8Qi03Md2yebAnU9kl26fhvsQmL/paYWKkZ/Ghm3
+            sLGkl1YpPdCvr3g1uNglOzB3fS2legYAYqxVvYxpBJrm8g7f7ZfY39mHtxkWuWV
+            izERE7jLPBbgX2nake/UilU5WviPgHjwK4jHn+Ho0lVmCVyVsOjNYQrS3bPUno1
+            krEYrnF7F+MVQQKpWRODaTnXz3i3mLElqni/kgsYCXVxqV5bCmqlQxV03jD3pRf
+            Tf1dgbxMJEme+doZNf8KaKKoRH1t27yIYkRTVJEn6R6lwxbkWCJHZ5jsMWffNxO
+            nN9HxW34L5j+ERQaH+2iKhGt+g5QIDAQABo3IwcDBuBgNVHQEEZzBlgBDRveN2i
+            BZdZuNHANqpnuN5oT8wPTE7MDkGA1UEAxMyV0lGIFNhbXBsZXMgLSBTZXJ2aWNl
+            IFByb3ZpZGVyIFNpZ25pbmcgQ2VydGlmaWNhdGWCEAeowP9s+WO6Rzwk/yYDTwU
+            wDQYJKoZIhvcNAQEEBQADggEBADBp0bhjpKG3Dk3sTl8sFXAbl7q1Q6cVChrwFg
+            g8buQc4FRV06K4y3EBY060FMBfEjS0eE4rpUEajiVLaZ+8KA+5AN+q5a00J/hxL
+            Vy8CTplxZxtCxPiZqBHw3YT7g+/QWBNiEAXd4y5CY0Wa1CqW0SayMmIZxG2o/uR
+            cL7O307DX4k35V96bdnhNTRYtfUdqBpwsiuwGNW9ND297cgThEPZzqjPMpTsoYT
+            pLQAHUN9Uv4IsfjcQB+nnHniWSEz7SQl2cBtSz7QCaGLkheYnDEd5y6eYWM+G3+
+            rIwc6y3cBVZiMvIasdu0jGighpozanq2/wkr/J1jgEC9UHvN9w9Sk=
+          </X509Certificate>
+        </X509Data>
+      </KeyInfo>
+    </KeyDescriptor>
+    <!--<KeyDescriptor
+      use="encryption">
+      <KeyInfo xmlns="http://www.w3.org/2000/09/xmldsig#">
+        <X509Data>
+          <X509Certificate>MIIB7jCCAVugAwIBAgIQA1lgpx06ar1NswQIgHVi8zAJBgUrDgMCHQUAMBQxEjAQBgNVBAMTCWxvY2FsaG9zdDAeFw05OTEyMzEyMTAwMDBaFw0zNTEyMzEyMTAwMDBaMBQxEjAQBgNVBAMTCWxvY2FsaG9zdDCBnzANBgkqhkiG9w0BAQEFAAOBjQAwgYkCgYEA637jTjvAiFsTeHa4YMmozZnpvJXfAXiA+x/NHcoqkOkhPpS7wyyRKZ+24jMxthQyoeTzJjVtzrCOfQfEoQx8G6N07d8Z8cKzC5947Jgcbbh1bHr0kVRlRQDWvJ/Tgss0qpUYjHnuoOtIAkhNa6rgMXp5SpPnLOgblPsIfgLXm4UCAwEAAaNJMEcwRQYDVR0BBD4wPIAQZHSh4Q+7VC7nxyxyWwlcmKEWMBQxEjAQBgNVBAMTCWxvY2FsaG9zdIIQA1lgpx06ar1NswQIgHVi8zAJBgUrDgMCHQUAA4GBAAlBi5UeiNh1Ihj5L+MjjNSRMx7EAJBi1FRtesk+c/tcpCa0ZzF1W12tOy+VD8OtSNXZRWiZ2rjzOujzartBdowhYutNwpKIDfTCEc306bOxbV+Q2cfidrJ3V1E9SW490FlKac1cqGDPUx1EO88FdNefFvU6JaZ0/V23PgTfE3mm</X509Certificate>
+        </X509Data>
+      </KeyInfo>
+    </KeyDescriptor>-->
+    <SingleLogoutService
+      Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Redirect"
+      Location="https://localhost:44314/Default.aspx" />
+    <AssertionConsumerService
+      Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-POST"
+      Location="https://localhost:44314/Default.aspx"
+      index="0"
+      isDefault="true" />
+    <AssertionConsumerService
+      Binding="urn:oasis:names:tc:SAML:2.0:bindings:HTTP-Artifact"
+      Location="https://localhost:44314/Default.aspx"
+      index="1" />
+  </SPSSODescriptor>
+</EntityDescriptor>

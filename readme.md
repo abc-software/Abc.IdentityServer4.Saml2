@@ -39,24 +39,40 @@ public static IEnumerable<Client> GetClients()
     {
         new Client
         {
-            // realm identifier
-            ClientId = "urn:owinrp",
-            
-            // must be set to SAML2
+            ClientId = "urn:owinrp", // entityId identifier
+            ProtocolType = ProtocolTypes.Saml2p, // must be set to SAML2
+
+            RedirectUris = { "https://localhost:44334/Saml2/Acs" }, // reply URL
+            PostLogoutRedirectUris = { "https://localhost:44334/" }, 
+            FrontChannelLogoutUri = "https://localhost:44334/Saml2/Acs",
+            AccessTokenLifetime = 36000, // lifetime of SAML2 token
+
+            AllowedScopes = { "openid", "profile" }
+        },
+        new Client
+        {
+            ClientId = "urn:aspnetcorerp",
             ProtocolType = ProtocolTypes.Saml2p,
 
-            // reply URL
-            RedirectUris = { "http://localhost:10313/" },
-            
-            // signout cleanup url
-            LogoutUri = "http://localhost:10313/home/signoutcleanup",
-            
-            // lifetime of SAML token
+            RedirectUris = { "https://localhost:44302/Auth/AssertionConsumerService" },
+            PostLogoutRedirectUris = { "https://localhost:44302/Auth/PostLogout" },
+            FrontChannelLogoutUri = "https://localhost:44302/Auth/Logout",
             AccessTokenLifetime = 36000,
 
-            // identity scopes - the associated claims will be used to call the profile service
             AllowedScopes = { "openid", "profile" }
-        }
+        },
+        new Client
+        {
+            ClientId = "urn:aspnetwebapprp",
+            ProtocolType = ProtocolTypes.Saml2p,
+
+            RedirectUris = { "https://localhost:44314/Default.aspx" },
+            PostLogoutRedirectUris = { "https://localhost:44314/Default.aspx" },
+            FrontChannelLogoutUri = "https://localhost:44314/Default.aspx",
+            AccessTokenLifetime = 36000,
+
+            AllowedScopes = { "openid", "profile" }
+        },
     };
 }
 ```
@@ -86,7 +102,7 @@ services.AddIdentityServer()
 ```
 
 ### Enable encrypted SAML2.0 token
-Add to project Abc.IdentityModel.Tokens.Saml via nuget and change SecurityTokenHandlers, e.g.:
+Add to project [Abc.IdentityModel.Tokens.Saml](https://www.nuget.org/packages/Abc.IdentityModel.Tokens.Saml/) via nuget and change SecurityTokenHandlers, e.g.:
 
 ```csharp
 builder.AddSaml2(options => {

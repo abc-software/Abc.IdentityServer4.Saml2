@@ -8,14 +8,9 @@
 // ----------------------------------------------------------------------------
 
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Text.Encodings.Web;
 
 namespace IdentityServer4.Extensions
 {
@@ -33,19 +28,6 @@ namespace IdentityServer4.Extensions
         }
 
         [DebuggerStepThrough]
-        public static NameValueCollection AsNameValueCollection(this IDictionary<string, StringValues> collection)
-        {
-            var nv = new NameValueCollection();
-
-            foreach (var field in collection)
-            {
-                nv.Add(field.Key, field.Value.First());
-            }
-
-            return nv;
-        }
-
-        [DebuggerStepThrough]
         public static bool IsMissing(this string value)
         {
             return string.IsNullOrWhiteSpace(value);
@@ -58,6 +40,7 @@ namespace IdentityServer4.Extensions
             {
                 return true;
             }
+
             if (value.Length > maxLength)
             {
                 return true;
@@ -76,7 +59,7 @@ namespace IdentityServer4.Extensions
         public static bool IsLocalUrl(this string url)
         {
             return
-                !String.IsNullOrEmpty(url) &&
+                !string.IsNullOrEmpty(url) &&
 
                 // Allows "/" or "/foo" but not "//" or "/\".
                 ((url[0] == '/' && (url.Length == 1 || (url[1] != '/' && url[1] != '\\'))) ||
@@ -85,21 +68,10 @@ namespace IdentityServer4.Extensions
                 (url.Length > 1 && url[0] == '~' && url[1] == '/'));
         }
 
-        public static string AddQueryString(this string url, string query)
+        [DebuggerStepThrough]
+        public static string AddQueryString(this string url, string name, string value)
         {
-            if (!url.Contains("?"))
-            {
-                if (!query.StartsWith("?"))
-                {
-                    url += "?";
-                }
-            }
-            else if (!url.EndsWith("&"))
-            {
-                url += "&";
-            }
-
-            return url + query;
+            return QueryHelpers.AddQueryString(url, name, value);
         }
 
         public static string GetOrigin(this string url)
@@ -120,12 +92,6 @@ namespace IdentityServer4.Extensions
             }
 
             return null;
-        }
-
-        [DebuggerStepThrough]
-        public static string AddQueryString(this string url, string name, string value)
-        {
-            return url.AddQueryString(name + "=" + UrlEncoder.Default.Encode(value));
         }
 
         [DebuggerStepThrough]

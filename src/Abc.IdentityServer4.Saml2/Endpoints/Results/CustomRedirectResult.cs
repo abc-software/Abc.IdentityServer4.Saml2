@@ -7,9 +7,6 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
-using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.Validation;
 using IdentityServer4.Configuration;
@@ -20,6 +17,9 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Abc.IdentityServer4.Saml2.Endpoints.Results
 {

@@ -44,13 +44,13 @@ namespace IdentityServer4.WsFederation
             {
                 new Client
                 {
-                    ClientId = "urn:owinrp",
-                    ProtocolType = ProtocolTypes.Saml2p,
+                    ClientId = "urn:owinrp", // entityId identifier
+                    ProtocolType = ProtocolTypes.Saml2p, // must be set to SAML2
 
-                    RedirectUris = { "http://localhost:10313/" },
-                    PostLogoutRedirectUris = { "http://localhost:10313/" },
-                    FrontChannelLogoutUri = "http://localhost:10313/home/signoutcleanup",
-                    IdentityTokenLifetime = 36000,
+                    RedirectUris = { "https://localhost:44334/Saml2/Acs" }, // reply URL
+                    PostLogoutRedirectUris = { "https://localhost:44334/" }, 
+                    FrontChannelLogoutUri = "https://localhost:44334/Saml2/Acs",
+                    AccessTokenLifetime = 36000, // lifetime of SAML2 token
 
                     AllowedScopes = { "openid", "profile" }
                 },
@@ -59,10 +59,10 @@ namespace IdentityServer4.WsFederation
                     ClientId = "urn:aspnetcorerp",
                     ProtocolType = ProtocolTypes.Saml2p,
 
-                    RedirectUris = { "http://localhost:10314/signin-saml2" },
-                    PostLogoutRedirectUris = { "http://localhost:10314/" },
-                    FrontChannelLogoutUri = "http://localhost:10314/signin-saml2",
-                    IdentityTokenLifetime = 36000,
+                    RedirectUris = { "https://localhost:44302/Auth/AssertionConsumerService" },
+                    PostLogoutRedirectUris = { "https://localhost:44302/Auth/PostLogout" },
+                    FrontChannelLogoutUri = "https://localhost:44302/Auth/Logout",
+                    AccessTokenLifetime = 36000,
 
                     AllowedScopes = { "openid", "profile" }
                 },
@@ -71,10 +71,10 @@ namespace IdentityServer4.WsFederation
                     ClientId = "urn:aspnetwebapprp",
                     ProtocolType = ProtocolTypes.Saml2p,
 
-                    RedirectUris = { "http://localhost:10315/" },
-                    PostLogoutRedirectUris = { "http://localhost:10315/" },
-                    FrontChannelLogoutUri = "http://localhost:10315/",
-                    IdentityTokenLifetime = 36000,
+                    RedirectUris = { "https://localhost:44314/Default.aspx" },
+                    PostLogoutRedirectUris = { "https://localhost:44314/Default.aspx" },
+                    FrontChannelLogoutUri = "https://localhost:44314/Default.aspx",
+                    AccessTokenLifetime = 36000,
 
                     AllowedScopes = { "openid", "profile" }
                 },
