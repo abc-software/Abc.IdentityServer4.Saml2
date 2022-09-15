@@ -7,6 +7,7 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
+using Abc.IdentityModel.Metadata;
 using Abc.IdentityModel.Protocols.Saml2;
 using IdentityServer4;
 using IdentityServer4.Configuration;
@@ -15,12 +16,11 @@ using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.IdentityModel.Tokens;
-using Sustainsys.Saml2.Metadata;
+using Microsoft.IdentityModel.Xml;
 using System;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace Abc.IdentityServer4.Saml2.ResponseProcessing
 {
@@ -60,7 +60,7 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
         }
 
         /// <inheritdoc/>
-        public virtual async Task<MetadataBase> GenerateMetadata()
+        public virtual async Task<DescriptorBase> GenerateMetadata()
         {
             var credentials = await _keys.GetX509SigningCredentialsAsync();
             var signingKey = credentials.Key as X509SecurityKey;
@@ -72,42 +72,31 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
             var entityDescriptor = new EntityDescriptor(new EntityId(issuer));
             var descriptor = new IdpSsoDescriptor();
 
-            if (_spOptions.WantAuthenticationRequestsSigned)
-            {
-                descriptor.WantAuthnRequestsSigned = true;
-            }
+            descriptor.WantAuthnRequestsSigned = _spOptions.WantAuthenticationRequestsSigned;
 
             if (_options.Discovery.ShowKeySet)
             {
-                var x509Data = new Sustainsys.Saml2.Metadata.X509Data();
-                x509Data.Certificates.Add(signingKey.Certificate);
-
-                var keyInfo = new DSigKeyInfo();
-                keyInfo.Data.Add(x509Data);
-
-                var keyDescriptor = new KeyDescriptor()
+                var keyDescriptor = new KeyDescriptor(new KeyInfo(signingKey.Certificate))
                 {
-                    //KeyInfo = new KeyInfo(cert),
-                    KeyInfo = keyInfo,
                     Use = KeyType.Signing,
                 };
 
-                descriptor.Keys.Add(keyDescriptor);
+                descriptor.KeyDescriptors.Add(keyDescriptor);
             }
 
-            descriptor.NameIdentifierFormats.Add(new NameIDFormat() { Uri = Saml2Constants.NameIdentifierFormats.Unspecified });
-            descriptor.NameIdentifierFormats.Add(new NameIDFormat() { Uri = Saml2Constants.NameIdentifierFormats.Transient });
-            descriptor.NameIdentifierFormats.Add(new NameIDFormat() { Uri = Saml2Constants.NameIdentifierFormats.Persistent });
+            descriptor.NameIdFormats.Add(Saml2Constants.NameIdentifierFormats.Unspecified);
+            descriptor.NameIdFormats.Add(Saml2Constants.NameIdentifierFormats.Transient);
+            descriptor.NameIdFormats.Add(Saml2Constants.NameIdentifierFormats.Persistent);
 
             descriptor.ProtocolsSupported.Add(new Uri(Saml2Constants.Namespaces.Protocol));
 
             if (_options.Discovery.ShowEndpoints)
             {
-                descriptor.SingleSignOnServices.Add(new SingleSignOnService() { Binding = Saml2Constants.ProtocolBindings.HttpRedirect, Location = new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash()) });
-                descriptor.SingleSignOnServices.Add(new SingleSignOnService() { Binding = Saml2Constants.ProtocolBindings.HttpPost, Location = new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash()) });
-                descriptor.SingleLogoutServices.Add(new SingleLogoutService() { Binding = Saml2Constants.ProtocolBindings.HttpRedirect, Location = new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash()) });
-                descriptor.SingleLogoutServices.Add(new SingleLogoutService() { Binding = Saml2Constants.ProtocolBindings.HttpPost, Location = new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash()) });
-                descriptor.ArtifactResolutionServices.Add(0, new ArtifactResolutionService() { Binding = Saml2Constants.ProtocolBindings.Soap, Location = new Uri(baseUrl + Constants.ProtocolRoutePaths.ArtefactResolutionService.EnsureLeadingSlash()) });
+                descriptor.SingleSignOnServices.Add(new EndpointType(Saml2Constants.ProtocolBindings.HttpRedirect, new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash())));
+                descriptor.SingleSignOnServices.Add(new EndpointType(Saml2Constants.ProtocolBindings.HttpPost, new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash())));
+                descriptor.SingleLogoutServices.Add(new EndpointType(Saml2Constants.ProtocolBindings.HttpRedirect, new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash())));
+                descriptor.SingleLogoutServices.Add(new EndpointType(Saml2Constants.ProtocolBindings.HttpPost, new Uri(baseUrl + Constants.ProtocolRoutePaths.SingleSignOn.EnsureLeadingSlash())));
+                descriptor.ArtifactResolutionServices.Add(new IndexedEndpointType(0, Saml2Constants.ProtocolBindings.Soap, new Uri(baseUrl + Constants.ProtocolRoutePaths.ArtefactResolutionService.EnsureLeadingSlash())));
             }
 
             if (_options.Discovery.ShowClaims)
@@ -125,7 +114,7 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
                 var mappedClaims = _claims.MapClaims(_spOptions.DefaultClaimMapping, claims);
                 foreach (var item in mappedClaims)
                 {
-                    descriptor.SupportedAttributes.Add(new Microsoft.IdentityModel.Tokens.Saml2.Saml2Attribute(item.Type) { NameFormat = Saml2Constants.AttributeNameFormats.Uri });
+                    descriptor.Attributes.Add(new Microsoft.IdentityModel.Tokens.Saml2.Saml2Attribute(item.Type) { NameFormat = Saml2Constants.AttributeNameFormats.Uri });
                 }
             }
 

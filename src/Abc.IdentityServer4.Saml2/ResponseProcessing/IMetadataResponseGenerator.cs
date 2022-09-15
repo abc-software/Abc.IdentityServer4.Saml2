@@ -7,7 +7,7 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
-using Sustainsys.Saml2.Metadata;
+using Abc.IdentityModel.Metadata;
 using System.Threading.Tasks;
 
 namespace Abc.IdentityServer4.Saml2.ResponseProcessing
@@ -17,6 +17,6 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
     /// </summary>
     public interface IMetadataResponseGenerator
     {
-        Task<MetadataBase> GenerateMetadata();
+        Task<DescriptorBase> GenerateMetadata();
     }
 }
