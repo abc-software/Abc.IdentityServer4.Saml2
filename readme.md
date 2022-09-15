@@ -234,7 +234,7 @@ Use the WebForms SAML2 module to point to the SAML2 endpoint, e.g.:
         <!-- The set of trusted issuers.  This should match the entityIDs and thumbprints of signing certificates 
              specified in metadata\identityprovider.xml. -->
         <trustedIssuers>
-          <add thumbprint="72 49 4c 3a d3 6f 3a 1d 94 7b 38 d1 7e b2 50 57 4c d3 ef 92" name="LVP.STS" />
+          <add thumbprint="6b7acc520305bfdb4f7252daeb2177cc091faae1" name="IdentityServer.Saml2" />
         </trustedIssuers>
       </issuerNameRegistry>
       <!-- The resolver to use when finding this service's signing and encrypting certificates. -->

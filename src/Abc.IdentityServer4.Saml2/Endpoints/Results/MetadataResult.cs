@@ -7,20 +7,21 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
+using Abc.IdentityModel.Metadata;
 using IdentityServer4.Hosting;
 using Microsoft.AspNetCore.Http;
-using Sustainsys.Saml2.Metadata;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Abc.IdentityServer4.Saml2.Endpoints.Results
 {
     public class MetadataResult : IEndpointResult
     {
-        private readonly MetadataBase _metadata;
+        private readonly DescriptorBase _metadata;
 
-        public MetadataResult(MetadataBase metadata)
+        public MetadataResult(DescriptorBase metadata)
         {
             _metadata = metadata ?? throw new System.ArgumentNullException(nameof(metadata));
         }
@@ -28,10 +29,14 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results
         public Task ExecuteAsync(HttpContext context)
         {
             var ser = new MetadataSerializer();
-            using var ms = new MemoryStream();
-            ser.WriteMetadata(ms, _metadata);
+            using var stream = new MemoryStream();
+            using (var writer = XmlWriter.Create(stream))
+            {
+                ser.WriteMetadata(writer, _metadata);
+            }
+
             context.Response.ContentType = "application/samlmetadata+xml"; // "application/xml"
-            var metaAsString = Encoding.UTF8.GetString(ms.ToArray());
+            var metaAsString = Encoding.UTF8.GetString(stream.ToArray());
             return context.Response.WriteAsync(metaAsString);
         }
     }

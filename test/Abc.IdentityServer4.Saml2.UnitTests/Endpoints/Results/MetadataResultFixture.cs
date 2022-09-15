@@ -1,7 +1,9 @@
-﻿using FluentAssertions;
+﻿using Abc.IdentityModel.Metadata;
+using Abc.IdentityModel.Protocols.Saml2;
+using FluentAssertions;
+using IdentityModel;
 using IdentityServer4.Extensions;
 using Microsoft.AspNetCore.Http;
-using Sustainsys.Saml2.Metadata;
 using System;
 using System.IO;
 using System.Threading.Tasks;
@@ -11,7 +13,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
 {
     public class MetadataResultFixture
     {
-        private MetadataBase _metadata;
+        private EntityDescriptor _metadata;
         private MetadataResult _target;
         private DefaultHttpContext _context;
 
@@ -22,7 +24,12 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
             _context.SetIdentityServerBasePath("/");
             _context.Response.Body = new MemoryStream();
 
+            var descriptor = new IdpSsoDescriptor();
+            descriptor.ProtocolsSupported.Add(new Uri(Saml2Constants.Namespaces.Protocol));
+            descriptor.SingleSignOnServices.Add(new EndpointType(Saml2Constants.ProtocolBindings.HttpRedirect, new Uri("https://localhost/")));
+
             _metadata = new EntityDescriptor(new EntityId("urn:issuer"));
+            _metadata.RoleDescriptors.Add(descriptor);
 
             _target = new MetadataResult(_metadata);
         }
@@ -49,7 +56,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
             using (var rdr = new StreamReader(_context.Response.Body))
             {
                 var xml = rdr.ReadToEnd();
-                xml.Should().Contain(@"<EntityDescriptor entityID=""urn:issuer""");
+                xml.Should().Contain(@"<mt:EntityDescriptor entityID=""urn:issuer""");
             }
         }
     }
