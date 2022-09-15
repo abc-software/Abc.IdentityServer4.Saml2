@@ -1,4 +1,4 @@
-# Abc.IdentityServer4.Saml2
+# Abc.IdentityServer4.Saml2  ![](https://github.com/abc-software/Abc.IdentityServer4.Saml2/actions/workflows/dotnet.yml/badge.svg)
 
 ## Overview
 Implementation SAML2 IdP support for IdentityServer4 with .NET core.
