@@ -156,5 +156,19 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 
             result.Should().BeOfType<Endpoints.Results.ErrorPageResult>();
         }
+
+        [Fact]
+        [Trait("Category", Category)]
+        public async Task logout_without_requestId_should_return_error_page()
+        {
+            _mockUserSession.User = _user;
+
+            _context.Request.Method = "GET";
+            _context.Request.Path = new PathString("/saml2/slo/callback");
+
+            var result = await _target.ProcessAsync(_context);
+
+            result.Should().BeOfType<Endpoints.Results.ErrorPageResult>();
+        }
     }
 }

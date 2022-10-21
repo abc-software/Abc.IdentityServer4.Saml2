@@ -12,10 +12,12 @@ using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using Abc.IdentityServer4.Saml2.Validation;
 using IdentityServer4.Endpoints.Results;
 using IdentityServer4.Hosting;
+using IdentityServer4.Models;
 using IdentityServer4.Services;
 using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
+using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -54,9 +56,12 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
                 return new StatusCodeResult(HttpStatusCode.MethodNotAllowed);
             }
 
-            var requestId = context.Request.Query[Constants.DefaultRoutePathParams.RequestIdParameterName];
+            var requestId = (string)context.Request.Query[Constants.DefaultRoutePathParams.RequestIdParameterName];
             var data = await _authorizationParametersMessageStore.ReadAsync(requestId);
-            await _authorizationParametersMessageStore.DeleteAsync(requestId);
+            if (requestId != null)
+            {
+                await _authorizationParametersMessageStore.DeleteAsync(requestId);
+            }
 
             if (data?.Data == null)
             {
