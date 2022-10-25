@@ -195,6 +195,39 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 
         [Fact]
         [Trait("Category", Category)]
+        public async Task signin_empty_data_should_return_error_page()
+        {
+            var key = Guid.NewGuid().ToString();
+            _mockAuthorizationParametersMessageStore.Messages.Add(key, new Message<Dictionary<string, string[]>>(new Dictionary<string, string[]>(), DateTime.UtcNow));
+
+            _mockUserSession.User = _user;
+
+            _context.Request.Method = "GET";
+            _context.Request.Path = new PathString("/saml2/callback");
+            _context.Request.QueryString = new QueryString("?authzId=" + key);
+
+            var result = await _target.ProcessAsync(_context);
+
+            result.Should().BeOfType<Endpoints.Results.ErrorPageResult>();
+        }
+
+        [Fact]
+        [Trait("Category", Category)]
+        public async Task signin_invalid_request_should_return_error_page()
+        {
+            _mockUserSession.User = _user;
+
+            _context.Request.Method = "GET";
+            _context.Request.Path = new PathString("/saml2/callback");
+
+            var result = await _target.ProcessAsync(_context);
+
+            result.Should().BeOfType<Endpoints.Results.ErrorPageResult>();
+        }
+
+
+        [Fact]
+        [Trait("Category", Category)]
         public async Task consent_missing_consent_data_should_return_error_page()
         {
             var parameters = new NameValueCollection()

@@ -76,7 +76,7 @@ namespace IdentityServer4.Extensions
                 var endSessionMessageStore = context.RequestServices.GetRequiredService<IMessageStore<LogoutNotificationContext>>();
                 var id = await endSessionMessageStore.WriteAsync(msg);
 
-                var signoutIframeUrl = context.GetIdentityServerBaseUrl().EnsureTrailingSlash() + Constants.ProtocolRoutePaths.SingleLogoutServiceCallback;
+                var signoutIframeUrl = context.GetIdentityServerBaseUrl().EnsureTrailingSlash() + Constants.ProtocolRoutePaths.EndSessionCallback;
                 signoutIframeUrl = signoutIframeUrl.AddQueryString(Constants.DefaultRoutePathParams.EndSessionCallback, id);
 
                 return signoutIframeUrl;

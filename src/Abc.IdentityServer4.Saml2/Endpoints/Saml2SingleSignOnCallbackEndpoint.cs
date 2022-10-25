@@ -20,6 +20,7 @@ using IdentityServer4.Stores;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -56,11 +57,14 @@ namespace Abc.IdentityServer4.Saml2.Endpoints
                 return new StatusCodeResult(HttpStatusCode.MethodNotAllowed);
             }
 
-            var messageStoreId = context.Request.Query[Constants.DefaultRoutePathParams.MessageStoreIdParameterName];
+            var messageStoreId = (string)context.Request.Query[Constants.DefaultRoutePathParams.MessageStoreIdParameterName];
             var data = await _authorizationParametersMessageStore.ReadAsync(messageStoreId);
-            await _authorizationParametersMessageStore.DeleteAsync(messageStoreId);
+            if (messageStoreId != null)
+            {
+                await _authorizationParametersMessageStore.DeleteAsync(messageStoreId);
+            }
 
-            if (data?.Data == null)
+            if (data?.Data == null || !data.Data.Any())
             {
                 return await CreateSignInErrorResult("SAML2 message is missing data.");
             }

@@ -51,7 +51,7 @@ namespace Abc.IdentityServer4.Saml2.Services.UnitTests
             var context = await _target.GetLogoutContextAsync(null);
 
             context.SignOutIFrameUrl.Should().NotBeNull();
-            context.SignOutIFrameUrl.Should().Contain("saml2/slo/callback?endSessionId=");
+            context.SignOutIFrameUrl.Should().Contain("saml2/endsession/callback?endSessionId=");
         }
 
         [Fact]

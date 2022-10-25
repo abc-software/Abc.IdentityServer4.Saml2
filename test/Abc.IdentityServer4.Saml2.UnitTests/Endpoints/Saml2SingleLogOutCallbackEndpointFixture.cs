@@ -142,7 +142,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 
         [Fact]
         [Trait("Category", Category)]
-        public async Task logout_missing_should_return_error_page()
+        public async Task missing_request_should_return_error_page()
         {
             var key = Guid.NewGuid().ToString();
 
@@ -159,7 +159,25 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.UnitTests
 
         [Fact]
         [Trait("Category", Category)]
-        public async Task logout_without_requestId_should_return_error_page()
+        public async Task empty_request_should_return_error_page()
+        {
+            var key = Guid.NewGuid().ToString();
+            _mockAuthorizationParametersMessageStore.Messages.Add(key, new Message<Dictionary<string, string[]>>(new Dictionary<string, string[]>(), DateTime.UtcNow));
+
+            _mockUserSession.User = _user;
+
+            _context.Request.Method = "GET";
+            _context.Request.Path = new PathString("/saml2/slo/callback");
+            _context.Request.QueryString = new QueryString("?requestId=" + key);
+
+            var result = await _target.ProcessAsync(_context);
+
+            result.Should().BeOfType<Endpoints.Results.ErrorPageResult>();
+        }
+
+        [Fact]
+        [Trait("Category", Category)]
+        public async Task invalid_requestId_should_return_error_page()
         {
             _mockUserSession.User = _user;
 
