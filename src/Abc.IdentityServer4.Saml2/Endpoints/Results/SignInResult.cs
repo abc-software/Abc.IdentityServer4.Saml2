@@ -40,13 +40,13 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results
         {
             Init(context);
 
-            await _serializer.SendMessageAsync(context.Response, Message);
-
             // serializer do not add CSP header to post form
-            if (context.Response.ContentType != null && context.Response.ContentType.Contains("text/html"))
+            if ((Message.HttpMethods & IdentityModel.Http.HttpDeliveryMethods.PostRequest) == IdentityModel.Http.HttpDeliveryMethods.PostRequest)
             {
                 context.Response.AddFormPostCspHeaders(_options.Csp, Message.BaseUri.AbsoluteUri.GetOrigin(), "sha256-veRHIN/XAFeehi7cRkeVBpkKTuAUMFxwA+NMPmu2Bec=");
             }
+
+            await _serializer.SendMessageAsync(context.Response, Message);
         }
 
         private void Init(HttpContext context)
