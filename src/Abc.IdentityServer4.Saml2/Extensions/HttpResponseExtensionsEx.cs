@@ -35,7 +35,7 @@ namespace IdentityServer4.Extensions
 
             if (!string.IsNullOrEmpty(frameSources))
             {
-                cspHeader += $"https://code.jquery.com/jquery-3.5.1.slim.min.js; frame-src {frameSources}";
+                cspHeader += $"https://code.jquery.com/jquery-3.5.1.slim.min.js; frame-src 'self' {frameSources}";
             }
 
             HttpResponseExtensions.AddCspHeaders(response.Headers, options, cspHeader);
