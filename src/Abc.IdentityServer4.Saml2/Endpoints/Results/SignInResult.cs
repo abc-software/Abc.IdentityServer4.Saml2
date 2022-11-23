@@ -43,7 +43,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results
             // serializer do not add CSP header to post form
             if ((Message.HttpMethods & IdentityModel.Http.HttpDeliveryMethods.PostRequest) == IdentityModel.Http.HttpDeliveryMethods.PostRequest)
             {
-                context.Response.AddFormPostCspHeaders(_options.Csp, Message.BaseUri.AbsoluteUri.GetOrigin(), "sha256-veRHIN/XAFeehi7cRkeVBpkKTuAUMFxwA+NMPmu2Bec=");
+                context.Response.AddSignInFormPostCspHeaders(_options.Csp, Message.BaseUri.AbsoluteUri.GetOrigin(), "sha256-veRHIN/XAFeehi7cRkeVBpkKTuAUMFxwA+NMPmu2Bec=", "sha256-goxCaq8/nQZDMumN+JWKJfmYH7cjYwLwwrQqkOF4W+o=");
             }
 
             await _serializer.SendMessageAsync(context.Response, Message);

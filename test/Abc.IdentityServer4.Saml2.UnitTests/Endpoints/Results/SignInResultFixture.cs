@@ -93,10 +93,14 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
             _context.Response.Headers.Should().ContainKey("Content-Security-Policy");
             var csp = _context.Response.Headers["Content-Security-Policy"].First();
             csp.Should().Contain("script-src 'unsafe-inline' 'sha256-veRHIN/XAFeehi7cRkeVBpkKTuAUMFxwA+NMPmu2Bec='");
+            csp.Should().Contain("style-src 'unsafe-inline' 'sha256-goxCaq8/nQZDMumN+JWKJfmYH7cjYwLwwrQqkOF4W+o='");
+            csp.Should().Contain("img-src data:");
 
             _context.Response.Headers.Should().ContainKey("X-Content-Security-Policy");
             var xcsp = _context.Response.Headers["X-Content-Security-Policy"].First();
             xcsp.Should().Contain("script-src 'unsafe-inline' 'sha256-veRHIN/XAFeehi7cRkeVBpkKTuAUMFxwA+NMPmu2Bec='");
+            xcsp.Should().Contain("style-src 'unsafe-inline' 'sha256-goxCaq8/nQZDMumN+JWKJfmYH7cjYwLwwrQqkOF4W+o='");
+            xcsp.Should().Contain("img-src data:");
         }
 
         [Fact]

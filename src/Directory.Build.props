@@ -10,7 +10,7 @@
     <RepositoryType>git</RepositoryType>
     
     <Description>SAML2 protocol for IdentityServer4</Description>
-    <Version>1.0.0-dev71</Version>
+    <Version>1.0.0-dev73</Version>
 
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ids.snk</AssemblyOriginatorKeyFile>
