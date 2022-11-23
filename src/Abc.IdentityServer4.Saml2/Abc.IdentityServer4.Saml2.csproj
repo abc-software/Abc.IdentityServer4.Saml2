@@ -33,7 +33,7 @@
     <PackageReference Include="Abc.IdentityModel.Metadata" Version="2.0.0-dev47" />
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.Storage" Version="4.1.2" />
-    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.0.1">
+    <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.4.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>

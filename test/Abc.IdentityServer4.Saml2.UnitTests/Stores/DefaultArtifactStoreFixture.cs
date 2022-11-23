@@ -6,7 +6,7 @@ using System;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace Abc.IdentityServer4.Saml2.UnitTests.Stores
+namespace Abc.IdentityServer4.Saml2.Stores.UnitTests
 {
     public class DefaultArtifactStoreFixture
     {
