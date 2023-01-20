@@ -12,9 +12,11 @@ using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using Abc.IdentityServer4.Saml2.Stores;
 using Abc.IdentityServer4.Saml2.Validation;
+using IdentityServer4;
 using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,19 +30,22 @@ namespace Abc.IdentityServer4.Saml2.Services
     {
         private readonly ILogoutNotificationService _logoutNotificationService;
         private readonly IRelyingPartyStore _relyingPartyStore;
+        private readonly IClientStore _clientStore;
         private readonly ILogoutRequestGenerator _requestGenerator;
         private readonly HttpSaml2MessageSerializer _serializer;
         private readonly ILogger _logger;
 
         public Saml2LogoutNotificationService(
             ILogoutNotificationService logoutNotificationService, 
-            IRelyingPartyStore relyingPartyStore, 
+            IRelyingPartyStore relyingPartyStore,
+            IClientStore clientStore,
             ILogoutRequestGenerator requestGenerator,
             HttpSaml2MessageSerializer serializer,
             ILogger<Saml2LogoutNotificationService> logger)
         {
             _logoutNotificationService = logoutNotificationService;
             _relyingPartyStore = relyingPartyStore;
+            _clientStore = clientStore;
             _requestGenerator = requestGenerator;
             _serializer = serializer;
             _logger = logger;
@@ -49,66 +54,66 @@ namespace Abc.IdentityServer4.Saml2.Services
         public async Task<IEnumerable<Saml2LogoutRequest>> GetFrontChannelLogoutNotificationsRequestsAsync(LogoutNotificationContext context)
         {
             var frontChannelRequests = new List<Saml2LogoutRequest>();
-            frontChannelRequests.AddRange(
-                (await _logoutNotificationService.GetFrontChannelLogoutNotificationsUrlsAsync(context))
-                .Select(u => new Saml2LogoutRequest(u, Constants.BindingTypes.RedirectString, u.GetOrigin())));
-
-            // Add SAML2 clients
-            foreach (var cid in context.ClientIds)
+            if (context.ClientIds != null)
             {
-                var participant = (Saml2SessionParticipant)cid;
-                var clientId = participant.ClientId;
+                frontChannelRequests.AddRange(
+                    (await _logoutNotificationService.GetFrontChannelLogoutNotificationsUrlsAsync(context))
+                    .Select(u => new Saml2LogoutRequest(u, Constants.BindingTypes.RedirectString, u.GetOrigin())));
 
-                var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityIdAsync(clientId);
-                if (relyingParty is null)
+                // Add SAML2 clients
+                foreach (var cid in context.ClientIds)
                 {
-                    continue;
-                }
+                    var participant = (Saml2SessionParticipant)cid;
+                    var clientId = participant.ClientId;
 
-                // support only one
-                var sloService = relyingParty.SingleLogoutServices.FirstOrDefault();
-                if (sloService == null)
-                {
-                    _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'. Unable to find SLO endpoint with Redirect or POST binding");
-                    continue;
-                }
-
-                var vr = new Saml2RequestValidationResult(new ValidatedSaml2Request()
-                {
-                    Subject = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("sub", context.SubjectId) })),
-                    RelyingParty = relyingParty,
-                    SessionParticipant = participant,
-                });
-
-                var sloMessage = await _requestGenerator.GenerateRequestAsync(vr);
-
-                if (sloService.Binding == Saml2Constants.ProtocolBindings.HttpRedirectString)
-                {
-                    if ((sloMessage.HttpMethods & HttpDeliveryMethods.GetRequest) != HttpDeliveryMethods.GetRequest)
+                    var client = await _clientStore.FindEnabledClientByIdAsync(clientId);
+                    if (client is null || client.ProtocolType != IdentityServerConstants.ProtocolTypes.Saml2p || !client.FrontChannelLogoutUri.IsPresent())
                     {
-                        _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'.");
                         continue;
                     }
 
-                    var sloRedirectMessage = _serializer.GetRequestUrl(sloMessage);
-                    frontChannelRequests.Add(new Saml2LogoutRequest(sloRedirectMessage, Constants.BindingTypes.RedirectString, sloRedirectMessage.GetOrigin()));
-                }
-                else if (sloService.Binding == Saml2Constants.ProtocolBindings.HttpPostString) 
-                {
-                    if ((sloMessage.HttpMethods & HttpDeliveryMethods.PostRequest) != HttpDeliveryMethods.PostRequest)
+                    var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityIdAsync(clientId);
+
+                    var sloBinding = relyingParty?.FrontChannelLogoutBinding ?? Saml2Constants.ProtocolBindings.HttpRedirectString;
+
+                    var vr = new Saml2RequestValidationResult(new ValidatedSaml2Request()
                     {
-                        _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'.");
-                        continue;
+                        Subject = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("sub", context.SubjectId) })),
+                        RelyingParty = relyingParty,
+                        SessionParticipant = participant,
+                        ReplyUrl = client.FrontChannelLogoutUri,
+                    });
+
+                    var sloMessage = await _requestGenerator.GenerateRequestAsync(vr);
+
+                    if (sloBinding == Saml2Constants.ProtocolBindings.HttpRedirectString)
+                    {
+                        if ((sloMessage.HttpMethods & HttpDeliveryMethods.GetRequest) != HttpDeliveryMethods.GetRequest)
+                        {
+                            _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'.");
+                            continue;
+                        }
+
+                        var sloRedirectMessage = _serializer.GetRequestUrl(sloMessage);
+                        frontChannelRequests.Add(new Saml2LogoutRequest(sloRedirectMessage, Constants.BindingTypes.RedirectString, sloRedirectMessage.GetOrigin()));
                     }
+                    else if (sloBinding == Saml2Constants.ProtocolBindings.HttpPostString)
+                    {
+                        if ((sloMessage.HttpMethods & HttpDeliveryMethods.PostRequest) != HttpDeliveryMethods.PostRequest)
+                        {
+                            _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'.");
+                            continue;
+                        }
 
-                    string sloPostMessage = _serializer.GetPostBody(sloMessage);
+                        string sloPostMessage = _serializer.GetPostBody(sloMessage);
 
-                    // cut <form>...</form> from HTML
-                    var startPos = sloPostMessage.IndexOf("<body>");
-                    var endPos = sloPostMessage.IndexOf("</form>");
-                    var body = sloPostMessage.Substring(startPos + 6, endPos - startPos + 1);
+                        // cut <form>...</form> from HTML
+                        var startPos = sloPostMessage.IndexOf("<body>");
+                        var endPos = sloPostMessage.IndexOf("</form>");
+                        var body = sloPostMessage.Substring(startPos + 6, endPos - startPos + 1);
 
-                    frontChannelRequests.Add(new Saml2LogoutRequest(body, Constants.BindingTypes.PostString, sloMessage.BaseUri.OriginalString.GetOrigin()));
+                        frontChannelRequests.Add(new Saml2LogoutRequest(body, Constants.BindingTypes.PostString, sloMessage.BaseUri.OriginalString.GetOrigin()));
+                    }
                 }
             }
 

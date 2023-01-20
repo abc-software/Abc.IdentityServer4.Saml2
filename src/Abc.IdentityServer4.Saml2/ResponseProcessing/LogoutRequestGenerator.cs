@@ -60,9 +60,9 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
                 validatedRequest.RelyingParty?.SignatureAlgorithm ?? _options.DefaultSignatureAlgorithm,
                 validatedRequest.RelyingParty?.DigestAlgorithm ?? _options.DefaultDigestAlgorithm);
 
-            var singleSignOutService = validationResult.ValidatedRequest.RelyingParty?.SingleLogoutServices.FirstOrDefault();
-            var destination = singleSignOutService?.Location ?? validatedRequest.ReplyUrl;
+            var destination = validatedRequest.ReplyUrl;
             var participant = validatedRequest.SessionParticipant;
+            var binding = validatedRequest.RelyingParty?.FrontChannelLogoutBinding;
 
             var nameId = new Saml2NameIdentifier(validatedRequest.Subject.GetSubjectId())
             {
@@ -88,7 +88,7 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
             }
 
             var method =
-                string.Equals(singleSignOutService?.Binding, Abc.IdentityModel.Protocols.Saml2.Saml2Constants.ProtocolBindings.HttpPostString)
+                string.Equals(binding, Abc.IdentityModel.Protocols.Saml2.Saml2Constants.ProtocolBindings.HttpPostString)
                 ? HttpDeliveryMethods.PostRequest
                 : HttpDeliveryMethods.GetRequest;
            

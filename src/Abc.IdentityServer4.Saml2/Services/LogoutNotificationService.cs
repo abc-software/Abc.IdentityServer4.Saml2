@@ -12,8 +12,11 @@ using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer4.Saml2.ResponseProcessing;
 using Abc.IdentityServer4.Saml2.Stores;
 using Abc.IdentityServer4.Saml2.Validation;
+using IdentityServer4;
+using IdentityServer4.Extensions;
 using IdentityServer4.Models;
 using IdentityServer4.Services;
+using IdentityServer4.Stores;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,19 +30,22 @@ namespace Abc.IdentityServer4.Saml2.Services
     {
         private readonly ILogoutNotificationService _logoutNotificationService;
         private readonly IRelyingPartyStore _relyingPartyStore;
+        private readonly IClientStore _clientStore;
         private readonly ILogger _logger;
         private readonly ILogoutRequestGenerator _requestGenerator;
         private readonly HttpSaml2MessageSerializer _serializer;
 
         public LogoutNotificationService(
             ILogoutNotificationService logoutNotificationService, 
-            IRelyingPartyStore relyingPartyStore, 
+            IRelyingPartyStore relyingPartyStore,
+            IClientStore clientStore,
             ILogoutRequestGenerator requestGenerator,
             HttpSaml2MessageSerializer serializer,
             ILogger<LogoutNotificationService> logger)
         {
             _logoutNotificationService = logoutNotificationService;
             _relyingPartyStore = relyingPartyStore;
+            _clientStore = clientStore;
             _requestGenerator = requestGenerator;
             _serializer = serializer;
             _logger = logger;
@@ -61,23 +67,18 @@ namespace Abc.IdentityServer4.Saml2.Services
                 var participant = (Saml2SessionParticipant)cid;
                 var clientId = participant.ClientId;
 
+                var client = await _clientStore.FindEnabledClientByIdAsync(clientId);
+                if (client is null || client.ProtocolType != IdentityServerConstants.ProtocolTypes.Saml2p || !client.FrontChannelLogoutUri.IsPresent())
+                {
+                    continue;
+                }
+
                 var relyingParty = await _relyingPartyStore.FindRelyingPartyByEntityIdAsync(clientId);
-                if (relyingParty is null)
-                {
-                    continue;
-                }
 
-                // support only one
-                var sloService = relyingParty.SingleLogoutServices.FirstOrDefault();
-                if (sloService == null)
+                var sloBinding = relyingParty?.FrontChannelLogoutBinding ?? Saml2Constants.ProtocolBindings.HttpRedirectString;
+                if (sloBinding != Saml2Constants.ProtocolBindings.HttpRedirectString)
                 {
-                    _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'. Unable to find SLO endpoint with Redirect or POST binding");
-                    continue;
-                }
-
-                if (sloService.Binding != Saml2Constants.ProtocolBindings.HttpRedirectString)
-                {
-                    _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'. Only support POST binding");
+                    _logger.LogWarning($"Cannot generate SLO request for service provider '{clientId}'. Only support Redirect binding");
                     continue;
                 }
 
@@ -86,6 +87,7 @@ namespace Abc.IdentityServer4.Saml2.Services
                     Subject = new ClaimsPrincipal(new ClaimsIdentity(new Claim[] { new Claim("sub", context.SubjectId) })),
                     RelyingParty = relyingParty,
                     SessionParticipant = participant,
+                    ReplyUrl = client.FrontChannelLogoutUri,
                 });
 
                 var sloMessage = await _requestGenerator.GenerateRequestAsync(vr);

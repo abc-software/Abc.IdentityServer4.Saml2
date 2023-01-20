@@ -23,7 +23,7 @@ namespace IdentityServer4.Extensions
     {
         public static string GetClientIpAddress(this HttpContext context)
         {
-            return context.Connection.RemoteIpAddress.ToString();
+            return context.Connection.RemoteIpAddress?.ToString();
         }
 
         internal static async Task<string> GetIdentityServerSignoutFrameCallbackUrlAsync(this HttpContext context, LogoutMessage logoutMessage = null)
@@ -35,23 +35,26 @@ namespace IdentityServer4.Extensions
             LogoutNotificationContext endSessionMsg = null;
 
             // if we have a logout message, then that take precedence over the current user
-            if (logoutMessage?.ClientIds?.Any() == true)
+            if (logoutMessage != null && (logoutMessage.ClientId.IsPresent() || logoutMessage.ClientIds?.Any() == true))
             {
-                var clientIds = logoutMessage?.ClientIds;
-
-                // check if current user is same, since we might have new clients (albeit unlikely)
-                // investigate this case, possible when returned from idp
-                //if (currentSubId == logoutMessage?.SubjectId)
-                //{
-                //    clientIds = clientIds.Union(await userSession.GetClientListAsync()).Distinct();
-                //}
-
-                endSessionMsg = new LogoutNotificationContext
+                if (logoutMessage?.ClientIds?.Any() == true)
                 {
-                    SubjectId = logoutMessage.SubjectId,
-                    SessionId = logoutMessage.SessionId,
-                    ClientIds = clientIds,
-                };
+                    var clientIds = logoutMessage?.ClientIds;
+
+                    // check if current user is same, since we might have new clients (albeit unlikely)
+                    // investigate this case, possible when returned from idp
+                    //if (currentSubId == logoutMessage?.SubjectId)
+                    //{
+                    //    clientIds = clientIds.Union(await userSession.GetClientListAsync()).Distinct();
+                    //}
+
+                    endSessionMsg = new LogoutNotificationContext
+                    {
+                        SubjectId = logoutMessage.SubjectId,
+                        SessionId = logoutMessage.SessionId,
+                        ClientIds = clientIds,
+                    };
+                }
             }
             else if (currentSubId != null)
             {

@@ -9,6 +9,7 @@
 
 using Abc.IdentityModel.Http;
 using Abc.IdentityModel.Protocols.Saml2;
+using Abc.IdentityServer4.Saml2.Stores;
 using Abc.IdentityServer4.Saml2.Validation;
 using IdentityServer4.Extensions;
 using IdentityServer4.Services;
@@ -61,8 +62,8 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
                 validatedRequest.RelyingParty?.DigestAlgorithm ?? _options.DefaultDigestAlgorithm);
 
             var logoutRequest = validatedRequest.Saml2RequestMessage.Saml2Request as Saml2LogoutRequest;
-            var singleSignOutService = validationResult.ValidatedRequest.RelyingParty?.SingleLogoutServices.FirstOrDefault();
-            var destination = singleSignOutService?.Location ?? validatedRequest.ReplyUrl;
+            var destination = validatedRequest.ReplyUrl;
+            var binding = validatedRequest.RelyingParty?.FrontChannelLogoutBinding;
 
             var logoutResponse = new Saml2LogoutResponse(new Saml2Status(Saml2StatusCode.Success))
             {
@@ -74,7 +75,7 @@ namespace Abc.IdentityServer4.Saml2.ResponseProcessing
             };
 
             var method =
-                string.Equals(singleSignOutService?.Binding, Abc.IdentityModel.Protocols.Saml2.Saml2Constants.ProtocolBindings.HttpPostString)
+                string.Equals(binding, Abc.IdentityModel.Protocols.Saml2.Saml2Constants.ProtocolBindings.HttpPostString)
                 ? HttpDeliveryMethods.PostRequest
                 : HttpDeliveryMethods.GetRequest;
 

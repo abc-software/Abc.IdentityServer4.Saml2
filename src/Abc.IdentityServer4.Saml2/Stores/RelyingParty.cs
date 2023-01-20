@@ -73,10 +73,17 @@ namespace Abc.IdentityServer4.Saml2.Stores
         /// </value>
         public string KeyWrapAlgorithm { get; set; }
 
+        /// <summary>
+        /// Gets or sets the front channel logout binding.
+        /// </summary>
+        /// <value>
+        /// if <c>null</c> if use HTTP-Redirect binding.
+        /// </value>
+        public string FrontChannelLogoutBinding { get; set; }
+
         public X509Certificate2 ValidationCertificate { get; set; }
 
         public List<Service> SingleSignOnServices { get; set; } = new List<Service>();
-        public List<Service> SingleLogoutServices { get; set; } = new List<Service>(); 
         public List<Service> ArtifactResolutionServices { get; set; } = new List<Service>();
 
         /// <summary>

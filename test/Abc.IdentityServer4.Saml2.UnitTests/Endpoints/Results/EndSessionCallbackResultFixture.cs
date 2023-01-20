@@ -43,7 +43,7 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.Results.UnitTests
             await _target.ExecuteAsync(_context);
             _context.Response.Headers.Should().ContainKey("Content-Security-Policy");
             var scp = _context.Response.Headers["Content-Security-Policy"].First();
-            scp.Should().Contain("frame-src http://foo");
+            scp.Should().Contain("frame-src 'self' http://foo");
         }
 
         [Fact]
