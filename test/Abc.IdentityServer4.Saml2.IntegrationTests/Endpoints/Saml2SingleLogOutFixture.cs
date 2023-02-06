@@ -475,7 +475,6 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.IntegrationTests
             html.Should().Contain(HtmlEncoder.Default.Encode("https://client3/signout?sid=" + sid + "&iss=" + UrlEncoder.Default.Encode("https://server")));
         }
 
-
         [Fact]
         [Trait("Category", Category)]
         public async Task logout_with_one_client_should_not_render_signout_callback_iframe()
@@ -519,6 +518,42 @@ namespace Abc.IdentityServer4.Saml2.Endpoints.IntegrationTests
 
             _mockPipeline.LogoutWasCalled.Should().BeTrue();
             _mockPipeline.LogoutRequest.SignOutIFrameUrl.Should().BeNull();
+        }
+
+        [Fact]
+        [Trait("Category", Category)]
+        public async Task logoutcallback_should_return_logout_response()
+        {
+            await _mockPipeline.LoginAsync("bob");
+
+            _mockPipeline.BrowserClient.AllowAutoRedirect = false;
+            var url = _mockPipeline.CreateLoginUrl(
+                clientId: "urn:client1",
+                redirectUri: "https://client1/callback",
+                state: "123_state");
+            var response = await _mockPipeline.BrowserClient.GetAsync(url);
+
+            var authorization = new Saml2LoginResponse(await response.Content.ReadAsStringAsync());
+
+            _mockPipeline.BrowserClient.AllowAutoRedirect = true;
+            url = _mockPipeline.CreateLogoutUrl(
+                           clientId: "urn:client1",
+                           subjectId: "bob",
+                           state: "123_state",
+                           sessionIndex: authorization.SessionIndex);
+
+            response = await _mockPipeline.BrowserClient.GetAsync(url);
+
+            var postLogoutRedirectUrl = _mockPipeline.LogoutRequest.PostLogoutRedirectUri;
+            response = await _mockPipeline.BrowserClient.GetAsync(postLogoutRedirectUrl);
+
+            {
+                var parts = response.RequestMessage.RequestUri.AbsoluteUri.Split('?');
+                parts[0].Should().Be("https://client1/signout");
+                var query = QueryHelpers.ParseNullableQuery(parts[1]);
+                query["SAMLResponse"].FirstOrDefault().Should().NotBeNull();
+                query["RelayState"].FirstOrDefault().Should().Be("123_state");
+            }
         }
     }
 }

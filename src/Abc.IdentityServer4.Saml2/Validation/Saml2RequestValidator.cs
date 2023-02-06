@@ -181,7 +181,7 @@ namespace Abc.IdentityServer4.Saml2.Validation
             {
                 // TODO: logoutRequest.Reason
 
-                request.ReplyUrl = client.PostLogoutRedirectUris.FirstOrDefault();
+                request.ReplyUrl = client.FrontChannelLogoutUri;
             }
 
             if (request.ReplyUrl == null)

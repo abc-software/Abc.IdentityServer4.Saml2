@@ -33,7 +33,7 @@ namespace Abc.IdentityServer4.Saml2.Validation.UnitTests
                         ProtocolType = IdentityServerConstants.ProtocolTypes.Saml2p,
                         Enabled = true,
                         RedirectUris = { "https://saml2/callback" },
-                        PostLogoutRedirectUris = { "https://saml2/postlogout" }
+                        FrontChannelLogoutUri = "https://saml2/signout",
                     },
                     new Client
                     {
