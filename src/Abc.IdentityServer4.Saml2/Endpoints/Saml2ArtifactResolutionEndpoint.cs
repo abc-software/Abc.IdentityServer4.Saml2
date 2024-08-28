@@ -185,11 +185,10 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             }
 
             // Body is empty
-
             return null;
         }
 
-        private class BodyWriter : IEndpointResult
+        private sealed class BodyWriter : IEndpointResult
         {
             private readonly Saml2Message _samlMessage;
             private readonly Saml2ProtocolSerializer _samlProtocolSerializer;

@@ -12,7 +12,6 @@ using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer.Extensions;
 using Abc.IdentityServer.Saml2.Validation;
 using IdentityModel;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
@@ -36,7 +35,7 @@ namespace Abc.IdentityServer.Saml2.ResponseProcessing
         private readonly IHttpContextAccessor _contextAccessor;
         private readonly IKeyMaterialService _keys;
         private readonly Services.IClaimsService _claimsService;
-        private readonly ISystemClock _clock;
+        private readonly IClock _clock;
         private readonly Stores.IArtifactStore _artifactStore;
 
         public SignInResponseGenerator(
@@ -47,7 +46,7 @@ namespace Abc.IdentityServer.Saml2.ResponseProcessing
             IHttpContextAccessor contextAccessor,
             IKeyMaterialService keys,
             Services.IClaimsService claimsService,
-            ISystemClock clock,
+            IClock clock,
             Stores.IArtifactStore artifactStore = null)
         {
             _logger = logger;

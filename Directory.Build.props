@@ -4,6 +4,6 @@
     <Authors>ABC software</Authors>
     <Company>ABC software.</Company>
     <Copyright>© ABC software. All rights reserved.</Copyright>
-    <Product>Abc.IdentityServer4</Product>
+    <Product>Abc.IdentityServer</Product>
   </PropertyGroup>
 </Project>
