@@ -57,7 +57,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints.Results
         {
             Init(context);
 
-            var returnUrl = _urls.BaseUrl.EnsureTrailingSlash() + Constants.ProtocolRoutePaths.SigleSignOnCallback;
+            var returnUrl = _urls.BasePath.EnsureTrailingSlash() + Constants.ProtocolRoutePaths.SigleSignOnCallback;
 
             var msg = new Message<IDictionary<string, string[]>>(_request.Saml2RequestMessage.ToDictionary(), _clock.UtcNow.UtcDateTime);
             var id = await _authorizationParametersMessageStore.WriteAsync(msg);

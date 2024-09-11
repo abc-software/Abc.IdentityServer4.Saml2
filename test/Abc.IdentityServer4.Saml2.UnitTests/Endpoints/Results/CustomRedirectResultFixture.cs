@@ -37,7 +37,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints.Results.UnitTests
             _urls = new MockServerUrls()
             {
                 Origin = "https://server",
-                BasePath = "/",
+                BasePath = "/".RemoveLeadingSlash(), // Duende build wrong baseUrl
             };
         }
 
@@ -63,9 +63,9 @@ namespace Abc.IdentityServer.Saml2.Endpoints.Results.UnitTests
         }
 
         [Fact]
-        public async Task cutomredirect_should_redirect_to_page_and_passs_info()
+        public async Task external_cutomredirect_should_redirect_to_page_and_passs_info()
         {
-            _target = new CustomRedirectResult(_request, "https://server/cutom", _options, _clock, _urls, _authorizationParametersMessageStore);
+            _target = new CustomRedirectResult(_request, "https://server/custom", _options, _clock, _urls, _authorizationParametersMessageStore);
 
             await _target.ExecuteAsync(_context);
 
@@ -73,10 +73,28 @@ namespace Abc.IdentityServer.Saml2.Endpoints.Results.UnitTests
             _context.Response.StatusCode.Should().Be(302);
 
             var location = _context.Response.Headers["Location"].First();
-            location.Should().StartWith("https://server/cutom");
+            location.Should().StartWith("https://server/custom");
 
             var query = QueryHelpers.ParseQuery(new Uri(location).Query);
-            query["returnUrl"].First().Should().Contain("/saml2/callback");
+            query["returnUrl"].First().Should().StartWith("https://server/saml2/callback");
+            query["returnUrl"].First().Should().Contain("?authzId=" + _authorizationParametersMessageStore.Messages.First().Key);
+        }
+
+        [Fact]
+        public async Task local_cutomredirect_should_redirect_to_page_and_passs_info()
+        {
+            _target = new CustomRedirectResult(_request, "~/custom", _options, _clock, _urls, _authorizationParametersMessageStore);
+
+            await _target.ExecuteAsync(_context);
+
+            _authorizationParametersMessageStore.Messages.Count.Should().Be(1);
+            _context.Response.StatusCode.Should().Be(302);
+
+            var location = _context.Response.Headers["Location"].First();
+            location.Should().StartWith("https://server/custom");
+
+            var query = QueryHelpers.ParseQuery(new Uri(location).Query);
+            query["returnUrl"].First().Should().StartWith("/saml2/callback");
             query["returnUrl"].First().Should().Contain("?authzId=" + _authorizationParametersMessageStore.Messages.First().Key);
         }
     }
