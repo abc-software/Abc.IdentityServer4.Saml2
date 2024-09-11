@@ -81,6 +81,12 @@ namespace Abc.IdentityServer.Saml2.Stores
         /// </value>
         public string FrontChannelLogoutBinding { get; set; }
 
+        /// <summary>
+        /// Gets or sets the validation certificate.
+        /// </summary>
+        /// <value>
+        /// The validation certificate.
+        /// </value>
         public X509Certificate2 ValidationCertificate { get; set; }
 
         public List<Service> SingleSignOnServices { get; set; } = new List<Service>();

@@ -228,9 +228,9 @@ namespace Abc.IdentityServer.Saml2.ResponseProcessing
             var includeSubjectConfirmationDataNotBefore = validatedRequest.RelyingParty?.IncludeSubjectConfirmationDataNotBefore.HasValue == true
                 ? validatedRequest.RelyingParty.IncludeSubjectConfirmationDataNotBefore.Value
                 : _options.IncludeSubjectConfirmationDataNotBefore;
-            if (includeSubjectConfirmationDataNotBefore) 
+            if (includeSubjectConfirmationDataNotBefore)
             {
-                subjectConfirmationData.NotBefore = includeSubjectConfirmationDataNotBefore ? issueInstant : null;
+                subjectConfirmationData.NotBefore = issueInstant;
             }
 
             assertion.Subject.SubjectConfirmations.First().SubjectConfirmationData = subjectConfirmationData;

@@ -9,17 +9,17 @@
     <RepositoryUrl>https://github.com/abc-software/Abc.IdentityServer4.Saml2.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
-    <Version>2.0.0-dev03</Version>
+    <Version>2.0.0-dev12</Version>
 
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ids.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
-  <PropertyGroup Condition=" '$(MSBuildProjectName)' == 'Abc.IdentityServer4.Saml2'">
+  <PropertyGroup Condition=" '$(MSBuildProjectName)' == 'Abc.IdentityServer4.Saml2' or '$(MSBuildProjectName)' == 'Abc.IdentityServer4.Saml2.EntityFramework.Storage'">
     <BaseIntermediateOutputPath>obj\IDS4\</BaseIntermediateOutputPath>
     <OutputPath>bin\IDS4\</OutputPath>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(MSBuildProjectName)' == 'Abc.DuendeIdentityServer.Saml2'">
+  <PropertyGroup Condition=" '$(MSBuildProjectName)' == 'Abc.DuendeIdentityServer.Saml2' or '$(MSBuildProjectName)' == 'Abc.DuendeIdentityServer.Saml2.EntityFramework.Storage'">
     <BaseIntermediateOutputPath>obj\DuendeIDS\</BaseIntermediateOutputPath>
     <OutputPath>bin\DuendeIDS\</OutputPath>
   </PropertyGroup>
