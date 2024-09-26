@@ -7,6 +7,8 @@
 // </copyright>
 // ----------------------------------------------------------------------------
 
+using System;
+
 namespace Abc.IdentityServer.Saml2.EntityFramework.Options;
 
 /// <summary>
@@ -38,4 +40,49 @@ public class Saml2ConfigurationStoreOptions : ConfigurationStoreOptions
     /// </value>
     public TableConfiguration RelyingPartyService { get; set; } = new TableConfiguration("RelyingPartyServices");
 
+    /// <summary>
+    /// Gets or sets the relying party certificate table configuration.
+    /// </summary>
+    /// <value>
+    /// The relying party certificate.
+    /// </value>
+    public TableConfiguration RelyingPartyCertificate { get; set; } = new TableConfiguration("RelyingPartyCertificates");
+
+    internal void Apply(ConfigurationStoreOptions storeOptions)
+    {
+        if (storeOptions is null)
+        {
+            throw new ArgumentNullException(nameof(storeOptions));
+        }
+
+        ConfigureDbContext = storeOptions.ConfigureDbContext;
+        ResolveDbContextOptions = storeOptions.ResolveDbContextOptions;
+        DefaultSchema = storeOptions.DefaultSchema;
+#if DUENDE
+        IdentityProvider = storeOptions.IdentityProvider;
+        EnablePooling = storeOptions.EnablePooling;
+        PoolSize = storeOptions.PoolSize;
+#endif
+        ApiResource = storeOptions.ApiResource;
+        ApiResourceClaim = storeOptions.ApiResourceClaim;
+        ApiResourceProperty = storeOptions.ApiResourceProperty;
+        ApiResourceScope = storeOptions.ApiResourceScope;
+        ApiResourceSecret = storeOptions.ApiResourceSecret;
+        ApiScope = storeOptions.ApiScope;
+        ApiScopeClaim = storeOptions.ApiScopeClaim;
+        ApiScopeProperty = storeOptions.ApiScopeProperty;
+        Client = storeOptions.Client;
+        ClientClaim = storeOptions.ClientClaim;
+        ClientCorsOrigin = storeOptions.ClientCorsOrigin;
+        ClientGrantType = storeOptions.ClientGrantType;
+        ClientIdPRestriction = storeOptions.ClientIdPRestriction;
+        ClientPostLogoutRedirectUri = storeOptions.ClientPostLogoutRedirectUri;
+        ClientProperty = storeOptions.ClientProperty;
+        ClientRedirectUri = storeOptions.ClientRedirectUri;
+        ClientScopes = storeOptions.ClientScopes;
+        ClientSecret = storeOptions.ClientSecret;
+        IdentityResource = storeOptions.IdentityResource;
+        IdentityResourceClaim = storeOptions.IdentityResourceClaim;
+        IdentityResourceProperty = storeOptions.IdentityResourceProperty;
+    }
 }

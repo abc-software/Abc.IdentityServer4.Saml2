@@ -39,8 +39,8 @@ public static class RelyingPartyMappers
                 SignAssertion = entity.SignAssertion,
 
                 ClaimMapping = entity.ClaimMappings.ToDictionary(m => m.FromClaimType, m => m.ToClaimType),
-                EncryptionCertificate = entity.EncryptionCertificate != null ? new X509Certificate2(entity.EncryptionCertificate) : null,
-                ValidationCertificate = entity.ValidationCertificate != null ? new X509Certificate2(entity.ValidationCertificate) : null,
+                EncryptionCertificate = entity.EncryptionCertificate != null ? new X509Certificate2(entity.EncryptionCertificate.RawData) : null,
+                ValidationCertificate = entity.ValidationCertificate != null ? new X509Certificate2(entity.ValidationCertificate.RawData) : null,
 
                 // UNDONE: move to services table
                 SingleSignOnServices = new List<Saml2.Stores.Service>() { new Saml2.Stores.Service() { Location = entity.SingleSignOnUri, Binding = entity.SingleSignOnBinding } },
@@ -78,8 +78,8 @@ public static class RelyingPartyMappers
                 ToClaimType = c.Value,
             }).ToList() ?? new List<Entities.RelyingPartyClaimMapping>(),
 
-            EncryptionCertificate = model.EncryptionCertificate?.GetPublicKey(),
-            ValidationCertificate = model.ValidationCertificate?.GetPublicKey(),
+            EncryptionCertificate = ToCertificateEntity(model.EncryptionCertificate),
+            ValidationCertificate = ToCertificateEntity(model.ValidationCertificate),
         };
 
         // UNDONE: move to services table
@@ -97,5 +97,20 @@ public static class RelyingPartyMappers
         }
 
         return entity;
+
+        Entities.RelyingPartyCertificate ToCertificateEntity(X509Certificate2 certificate)
+        {
+            return certificate == null ? null :
+                new Entities.RelyingPartyCertificate()
+                {
+                    Name = certificate.GetNameInfo(X509NameType.DnsName, forIssuer: false),
+                    Issuer = certificate.GetNameInfo(X509NameType.SimpleName, forIssuer: true),
+                    Subject = certificate.GetNameInfo(X509NameType.SimpleName, forIssuer: false),
+                    NotAfter = certificate.NotAfter,
+                    NotBefore = certificate.NotBefore,
+                    Thumbrint = certificate.GetCertHash(),
+                    RawData = certificate.GetRawCertData(),
+                };
+        }
     }
 }

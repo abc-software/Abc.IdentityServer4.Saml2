@@ -11,9 +11,19 @@ using System.Collections.Generic;
 
 namespace Abc.IdentityServer.Saml2.EntityFramework.Entities;
 
+/// <summary>
+/// Represents SAML2 relying party.
+/// </summary>
 public class RelyingParty
 {
+    /// <summary>
+    /// Gets or sets the primary key for this relying party.
+    /// </summary>
     public int ClientId { get; set; }
+
+    /// <summary>
+    /// Gets or sets the relying party client.
+    /// </summary>
     public virtual IdsEntities.Client Client { get; set; }
 
     /// <summary>
@@ -54,7 +64,7 @@ public class RelyingParty
     /// <value>
     /// The encryption certificate.
     /// </value>
-    public byte[] EncryptionCertificate { get; set; }
+    public virtual RelyingPartyCertificate EncryptionCertificate { get; set; }
 
     /// <summary>
     /// Gets or sets the encryption algorithm.
@@ -94,7 +104,7 @@ public class RelyingParty
     /// <value>
     /// The validation certificate.
     /// </value>
-    public byte[] ValidationCertificate { get; set; }
+    public virtual RelyingPartyCertificate ValidationCertificate { get; set; }
 
     /// <summary>
     /// Gets or sets a value indicating whether include in subject confirmation data not before date.

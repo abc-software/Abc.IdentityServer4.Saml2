@@ -60,7 +60,7 @@ public class RelyingPartyStore : ClientStore, IRelyingPartyStore
     {
         var query = Context.Clients
             .Where(x => x.ClientId == entityId)
-            .Join(Context.Saml2RelyingParties, x => x.Id, y => y.ClientId, (c, rp) =>
+            .Join(Context.Saml2RelyingParties.Include(c => c.ValidationCertificate).Include(c => c.EncryptionCertificate), x => x.Id, y => y.ClientId, (c, rp) =>
             new Entities.RelyingParty
             {
                 EntityId = c.ClientId,

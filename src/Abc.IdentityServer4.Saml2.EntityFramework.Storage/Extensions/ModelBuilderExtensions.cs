@@ -58,6 +58,24 @@ public static class ModelBuilderExtensions
             claimMapping.Property(x => x.FromClaimType).HasMaxLength(150).IsRequired();
             claimMapping.Property(x => x.ToClaimType).HasMaxLength(150).IsRequired();
         });
+
+
+        modelBuilder.Entity<Entities.RelyingPartyCertificate>(ec =>
+        {
+            ec.ToTable(storeOptions.RelyingPartyCertificate);
+
+            ec.HasKey(x => x.Id);
+            ec.Property(x => x.Name).HasMaxLength(400).IsRequired();
+            ec.Property(x => x.Issuer).HasMaxLength(255).IsRequired();
+            ec.Property(x => x.Subject).HasMaxLength(255).IsRequired();
+            ec.Property(x => x.Thumbrint).HasMaxLength(20).IsFixedLength().IsRequired();
+            ec.Property(x => x.RawData).IsRequired();
+
+            ec.HasIndex(x => x.Thumbrint).IsUnique();
+
+            ec.HasMany(x => x.RelyingParties).WithOne(x => x.EncryptionCertificate).IsRequired(false).OnDelete(DeleteBehavior.SetNull);
+            ec.HasMany(x => x.RelyingParties).WithOne(x => x.ValidationCertificate).IsRequired(false).OnDelete(DeleteBehavior.SetNull);
+        });
     }
 
     private static EntityTypeBuilder<TEntity> ToTable<TEntity>(this EntityTypeBuilder<TEntity> entityTypeBuilder, TableConfiguration configuration)

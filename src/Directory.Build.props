@@ -9,7 +9,7 @@
     <RepositoryUrl>https://github.com/abc-software/Abc.IdentityServer4.Saml2.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     
-    <Version>2.0.0-dev12</Version>
+    <Version>2.0.0-dev14</Version>
 
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>ids.snk</AssemblyOriginatorKeyFile>
