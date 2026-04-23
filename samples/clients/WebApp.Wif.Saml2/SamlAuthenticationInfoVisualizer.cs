@@ -127,7 +127,7 @@ If WS-Federation or SAML protocol is used, please enable bootstrap tokens in web
   </microsoft.identityModel>";
 
             if (token != null) {
-                SecurityTokenHandlerCollection securityTokenHandlerCollection = SecurityTokenHandlerCollection.CreateDefaultSecurityTokenHandlerCollection();
+                Microsoft.IdentityModel.Tokens.SecurityTokenHandlerCollection securityTokenHandlerCollection = Microsoft.IdentityModel.Tokens.SecurityTokenHandlerCollection.CreateDefaultSecurityTokenHandlerCollection();
                 StringBuilder sb = new StringBuilder();
                 XmlWriterSettings writerSettings = new XmlWriterSettings() {
                     ConformanceLevel = ConformanceLevel.Fragment,
@@ -151,8 +151,8 @@ If WS-Federation or SAML protocol is used, please enable bootstrap tokens in web
             return rawSamlTokenTable;
         }
 
-        static Table CreateSamlAssertionPropertiesTable(Saml2SecurityToken token) {
-            Saml2Assertion assertion = token.Assertion;
+        static Table CreateSamlAssertionPropertiesTable(Microsoft.IdentityModel.Tokens.Saml2.Saml2SecurityToken token) {
+            Microsoft.IdentityModel.Tokens.Saml2.Saml2Assertion assertion = token.Assertion;
 
             Table propertiesTable = new Table() {
                 ID = "SamlAssertionPropertiesTable",
@@ -310,8 +310,8 @@ If WS-Federation or SAML protocol is used, please enable bootstrap tokens in web
                 if (token is SamlSecurityToken) {
                     result.Rows.Add(CreateRow(CreateCell(CreateSamlAssertionPropertiesTable((SamlSecurityToken)token))));
                 }
-                else if (token is Saml2SecurityToken) {
-                    result.Rows.Add(CreateRow(CreateCell(CreateSamlAssertionPropertiesTable((Saml2SecurityToken)token))));
+                else if (token is Microsoft.IdentityModel.Tokens.Saml2.Saml2SecurityToken) {
+                    result.Rows.Add(CreateRow(CreateCell(CreateSamlAssertionPropertiesTable((Microsoft.IdentityModel.Tokens.Saml2.Saml2SecurityToken)token))));
                 }
 
                 result.Rows.Add(CreateRow(CreateCells(HtmlLineBreak)));

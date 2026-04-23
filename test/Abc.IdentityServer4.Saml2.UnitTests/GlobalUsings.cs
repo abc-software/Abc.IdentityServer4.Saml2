@@ -24,8 +24,10 @@ global using Ids = IdentityServer4;
 global using StatusCodeResult = IdentityServer4.Endpoints.Results.StatusCodeResult;
 #endif
 
-#if NET8_0_OR_GREATER
+#if NET8_0_OR_GREATER && DUENDE
+global using Duende.IdentityModel;
 global using IClock = Duende.IdentityServer.IClock;
 #else
+global using IdentityModel;
 global using IClock = Microsoft.AspNetCore.Authentication.ISystemClock;
 #endif

@@ -8,7 +8,6 @@
 // ----------------------------------------------------------------------------
 
 using Abc.IdentityServer.Saml2.Validation;
-using IdentityModel;
 using System.Collections.Generic;
 
 namespace Abc.IdentityServer.Saml2.Logging

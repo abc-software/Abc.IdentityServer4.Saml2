@@ -11,7 +11,6 @@ using Abc.IdentityModel.Protocols;
 using Abc.IdentityModel.Protocols.Saml2;
 using Abc.IdentityServer.Extensions;
 using Abc.IdentityServer.Saml2.Validation;
-using IdentityModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;

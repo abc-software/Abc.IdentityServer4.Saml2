@@ -6,7 +6,7 @@
   </ItemGroup>
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <PreserveCompilationContext>true</PreserveCompilationContext>
     <LangVersion>10.0</LangVersion>
@@ -40,9 +40,9 @@
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="4.1.2" />
     <PackageReference Include="IdentityServer4.Storage" Version="4.1.2" />
-    <PackageReference Include="Abc.IdentityModel.Http" Version="2.0.0" />
-    <PackageReference Include="Abc.IdentityModel.Http.Saml" Version="2.0.0" />
-    <PackageReference Include="Abc.IdentityModel.Metadata" Version="2.0.0" />
+    <PackageReference Include="Abc.IdentityModel.Http" Version="2.3.0" />
+    <PackageReference Include="Abc.IdentityModel.Http.Saml" Version="2.3.0" />
+    <PackageReference Include="Abc.IdentityModel.Metadata" Version="2.3.0" />
     <PackageReference Include="Microsoft.Net.Compilers.Toolset" Version="4.11.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

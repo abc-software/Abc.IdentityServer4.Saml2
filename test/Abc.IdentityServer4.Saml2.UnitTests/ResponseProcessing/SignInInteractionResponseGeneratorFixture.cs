@@ -2,7 +2,6 @@
 using Abc.IdentityServer.Extensions;
 using Abc.IdentityServer.Saml2.Validation;
 using FluentAssertions;
-using IdentityModel;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;

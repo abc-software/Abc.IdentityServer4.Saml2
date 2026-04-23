@@ -8,7 +8,6 @@
 // ----------------------------------------------------------------------------
 
 using Abc.IdentityModel.Protocols.Saml2;
-using IdentityModel;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;

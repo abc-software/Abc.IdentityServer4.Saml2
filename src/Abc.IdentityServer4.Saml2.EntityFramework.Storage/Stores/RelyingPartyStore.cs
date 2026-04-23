@@ -83,7 +83,7 @@ public class RelyingPartyStore : ClientStore, IRelyingPartyStore
                 SingleSignOnUri = rp.SingleSignOnUri,
             })
             .AsNoTracking()
-#if NET5_0_OR_GREATER
+#if NET5_0_OR_GREATER && !IDS4
             .AsSplitQuery()
 #endif
             ;
