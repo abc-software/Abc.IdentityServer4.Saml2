@@ -8,7 +8,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints.UnitTests
     {
         public DescriptorBase Metadata { get; set; } = new EntityDescriptor(new EntityId("urn:issuer"));
 
-        public Task<DescriptorBase> GenerateMetadata()
+        public Task<DescriptorBase> GenerateMetadataAsync()
         {
             return Task.FromResult(Metadata);
         }

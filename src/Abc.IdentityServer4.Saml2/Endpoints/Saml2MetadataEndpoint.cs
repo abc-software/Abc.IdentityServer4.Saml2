@@ -36,7 +36,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
 
             _logger.LogDebug("Start SAML2 metadata request");
 
-            return new Results.MetadataResult(await _generator.GenerateMetadata());
+            return new Results.MetadataResult(await _generator.GenerateMetadataAsync());
         }
     }
 }

@@ -18,6 +18,14 @@ using Saml2AuthenticationRequest = Abc.IdentityModel.Protocols.Saml2.Saml2Authen
 
 namespace Abc.IdentityServer.Saml2.Validation
 {
+    /// <summary>
+    /// Provides functionality to validate SAML2 authentication and logout requests according to SAML2 protocol and
+    /// IdentityServer configuration.
+    /// </summary>
+    /// <remarks>This class is typically used by components that need to process and validate incoming SAML2
+    /// requests from relying parties. It performs validation of request parameters, issuer, assertion consumer service
+    /// URLs, and other protocol-specific requirements. Thread safety is determined by the thread safety of the injected
+    /// dependencies.</remarks>
     public class Saml2RequestValidator : ISaml2RequestValidator
     {
         private readonly ILogger _logger;
@@ -28,6 +36,17 @@ namespace Abc.IdentityServer.Saml2.Validation
         private readonly IClock _clock;
         private readonly IRelyingPartyStore _relyingParties;
 
+        /// <summary>
+        /// Initializes a new instance of the Saml2RequestValidator class with the specified dependencies required for
+        /// SAML2 request validation.
+        /// </summary>
+        /// <param name="logger">The logger used to record diagnostic and operational information during request validation.</param>
+        /// <param name="clients">The client store used to retrieve client configuration information.</param>
+        /// <param name="userSession">The user session service used to access information about the current user's session.</param>
+        /// <param name="uriValidator">The redirect URI validator used to validate redirect URIs as part of the SAML2 request process.</param>
+        /// <param name="options">The IdentityServer options that configure validation behavior.</param>
+        /// <param name="clock">The clock service used to obtain the current time for time-sensitive validation operations.</param>
+        /// <param name="relyingParties">The relying party store used to retrieve configuration for SAML2 relying parties.</param>
         public Saml2RequestValidator(
             ILogger<Saml2RequestValidator> logger,
             IClientStore clients,
@@ -134,8 +153,17 @@ namespace Abc.IdentityServer.Saml2.Validation
                     {
                         return new Saml2RequestValidationResult(request, "invalid_request", "Invalid reply URI");
                     }
+#if DUENDE
+                    var redirectValidationContext = new Ids.Validation.RedirectUriValidationContext
+                    {
+                        Client = client,
+                        RequestedUri = assertionConsumerServiceUrl.AbsoluteUri,
+                    };
 
+                    if (await _uriValidator.IsRedirectUriValidAsync(redirectValidationContext))
+#else
                     if (await _uriValidator.IsRedirectUriValidAsync(authRequest.AssertionConsumerServiceUrl.AbsoluteUri, client))
+#endif
                     {
                         request.ReplyUrl = authRequest.AssertionConsumerServiceUrl.AbsoluteUri;
                     }

@@ -60,13 +60,13 @@ namespace Abc.IdentityServer.Saml2.Endpoints
 
             if (data?.Data == null || !data.Data.Any())
             {
-                return await CreateSignInErrorResult("SAML2 message is missing data.");
+                return await CreateSignInErrorResultAsync("SAML2 message is missing data.");
             }
 
             var requestMessage = data.Data.ToSaml2Message() as HttpSaml2RequestMessage2;
             if (!(requestMessage?.Saml2Request is Saml2LogoutRequest))
             {
-                return await CreateSignInErrorResult("SAML2 message is not logout request.");
+                return await CreateSignInErrorResultAsync("SAML2 message is not logout request.");
             }
 
             // user can be null here (this differs from HttpContext.User where the anonymous user is filled in)
@@ -75,7 +75,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             var validationResult = await _signinValidator.ValidateAsync(requestMessage, user);
             if (validationResult.IsError)
             {
-                return await CreateSignInErrorResult(
+                return await CreateSignInErrorResultAsync(
                     "SAML2 sign out request validation failed",
                     validationResult.ValidatedRequest,
                     validationResult.Error,

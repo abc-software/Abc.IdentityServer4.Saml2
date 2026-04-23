@@ -54,7 +54,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             var validationResult = await _signinValidator.ValidateAsync(signin, user);
             if (validationResult.IsError)
             {
-                return await CreateSignInErrorResult(
+                return await CreateSignInErrorResultAsync(
                     "SAML2 sign out request validation failed",
                     validationResult.ValidatedRequest,
                     validationResult.Error,
@@ -78,7 +78,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             var validationResult = await _signinValidator.ValidateAsync(signin, user);
             if (validationResult.IsError)
             {
-                return await CreateSignInErrorResult(
+                return await CreateSignInErrorResultAsync(
                     "SAML2 sign in request validation failed",
                     validationResult.ValidatedRequest,
                     validationResult.Error,
@@ -88,7 +88,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             var interactionResult = await _interaction.ProcessInteractionAsync(validationResult.ValidatedRequest, consent);
             if (interactionResult.IsError)
             {
-                return await CreateSignInErrorResult(
+                return await CreateSignInErrorResultAsync(
                     "SAML2 interaction generator error",
                     validationResult.ValidatedRequest,
                     interactionResult.Error,
@@ -115,7 +115,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             return new Results.SignInResult(responseMessage);
         }
 
-        protected async Task<IEndpointResult> CreateSignInErrorResult(
+        protected async Task<IEndpointResult> CreateSignInErrorResultAsync(
             string logMessage,
             Validation.ValidatedSaml2Request request = null,
             string error = "server_error",

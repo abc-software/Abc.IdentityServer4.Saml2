@@ -59,13 +59,13 @@ namespace Abc.IdentityServer.Saml2.Endpoints
 
             if (data?.Data == null || !data.Data.Any())
             {
-                return await CreateSignInErrorResult("SAML2 message is missing data.");
+                return await CreateSignInErrorResultAsync("SAML2 message is missing data.");
             }
 
             var requestMessage = data.Data.ToSaml2Message() as HttpSaml2RequestMessage2;
             if (!(requestMessage?.Saml2Request is Saml2AuthenticationRequest authenticationRequest))
             {
-                return await CreateSignInErrorResult("SAML2 message is not authentication request.");
+                return await CreateSignInErrorResultAsync("SAML2 message is not authentication request.");
             }
 
             // user can be null here (this differs from HttpContext.User where the anonymous user is filled in)
@@ -80,7 +80,7 @@ namespace Abc.IdentityServer.Saml2.Endpoints
             var consent = await _consentResponseStore.ReadAsync(consentRequest.Id);
             if (consent != null && consent.Data == null)
             {
-                return await CreateSignInErrorResult("consent message is missing data");
+                return await CreateSignInErrorResultAsync("consent message is missing data");
             }
 
             try

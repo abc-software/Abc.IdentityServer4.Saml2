@@ -78,7 +78,7 @@ namespace Abc.IdentityServer.Saml2
                 return null;
             }
 
-            var signInMessage = await GetSignInRequestMessage(returnUrl);
+            var signInMessage = await GetSignInRequestMessageAsync(returnUrl);
             if (signInMessage == null)
             {
                 return null;
@@ -109,7 +109,7 @@ namespace Abc.IdentityServer.Saml2
             return request;
         }
 
-        private async Task<HttpSaml2RequestMessage2> GetSignInRequestMessage(string returnUrl)
+        private async Task<HttpSaml2RequestMessage2> GetSignInRequestMessageAsync(string returnUrl)
         {
             var index = returnUrl.IndexOf('?');
             if (index >= 0)

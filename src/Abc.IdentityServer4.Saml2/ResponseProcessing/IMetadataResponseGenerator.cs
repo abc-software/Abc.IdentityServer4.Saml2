@@ -17,6 +17,6 @@ namespace Abc.IdentityServer.Saml2.ResponseProcessing
     /// </summary>
     public interface IMetadataResponseGenerator
     {
-        Task<DescriptorBase> GenerateMetadata();
+        Task<DescriptorBase> GenerateMetadataAsync();
     }
 }

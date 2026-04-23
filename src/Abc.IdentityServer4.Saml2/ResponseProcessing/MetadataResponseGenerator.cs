@@ -62,7 +62,7 @@ namespace Abc.IdentityServer.Saml2.ResponseProcessing
         }
 
         /// <inheritdoc/>
-        public virtual async Task<DescriptorBase> GenerateMetadata()
+        public virtual async Task<DescriptorBase> GenerateMetadataAsync()
         {
             var credentials = await _keys.GetX509SigningCredentialsAsync();
             var signingKey = credentials.Key as X509SecurityKey;
