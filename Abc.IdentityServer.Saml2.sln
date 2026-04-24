@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.2.32630.192
+# Visual Studio Version 18
+VisualStudioVersion = 18.5.11716.220 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{3C26909E-3C45-4438-BF63-0FA1B1CD1D15}"
 	ProjectSection(SolutionItems) = preProject
@@ -48,6 +48,11 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abc.DuendeIdentityServer.Saml2.EntityFramework.Storage", "src\Abc.IdentityServer4.Saml2.EntityFramework.Storage\Abc.DuendeIdentityServer.Saml2.EntityFramework.Storage.csproj", "{DE2514D0-9000-4A9D-90C5-5E4B663AA168}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Abc.IdentityServer4.Saml2.EntityFramework.Storage", "src\Abc.IdentityServer4.Saml2.EntityFramework.Storage\Abc.IdentityServer4.Saml2.EntityFramework.Storage.csproj", "{669F6980-A997-4164-B31E-495473EF3125}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHub", "GitHub", "{10CEC754-D416-454F-A5C5-0BBC652AA13D}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
